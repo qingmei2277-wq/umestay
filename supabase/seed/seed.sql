@@ -1,0 +1,10 @@
+-- UMESTAY Seed Data
+--
+-- Sample properties from the prototype (umestay_lake_v9.jsx)
+-- Copy the INSERT statements from the prototype's mock data here
+-- after the initial schema has been applied.
+--
+-- To apply seed data:
+--   supabase db reset  (applies migrations + seed)
+-- or
+--   psql $DATABASE_URL -f seed.sql

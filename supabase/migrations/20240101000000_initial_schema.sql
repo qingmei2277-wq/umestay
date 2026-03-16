@@ -1,0 +1,4 @@
+-- UMESTAY Initial Schema
+-- Source: 01-prepareing/supabase_schema.sql
+-- To apply: copy content from ../01-prepareing/supabase_schema.sql into this file
+-- Then run: supabase db push

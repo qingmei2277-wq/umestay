@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "home": "Home",
+    "search": "Search",
+    "favorites": "Favorites",
+    "messages": "Messages",
+    "account": "Account",
+    "login": "Log in",
+    "register": "Register"
+  },
+  "common": {
+    "search": "Search",
+    "filter": "Filter",
+    "book": "Book",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "back": "Back",
+    "save": "Save",
+    "loading": "Loading...",
+    "error": "Something went wrong, please try again"
+  },
+  "property": {
+    "daily": "Daily",
+    "monthly": "Monthly",
+    "per_night": "per night",
+    "per_month": "per month",
+    "guests": "Guests",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "available": "Available",
+    "unavailable": "Unavailable"
+  },
+  "booking": {
+    "checkin": "Check-in",
+    "checkout": "Check-out",
+    "nights": "nights",
+    "total": "Total",
+    "payment": "Payment",
+    "confirm_booking": "Confirm Booking"
+  }
+}

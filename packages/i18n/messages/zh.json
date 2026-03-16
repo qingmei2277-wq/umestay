@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "home": "首页",
+    "search": "搜索",
+    "favorites": "收藏",
+    "messages": "消息",
+    "account": "账户",
+    "login": "登录",
+    "register": "注册"
+  },
+  "common": {
+    "search": "搜索",
+    "filter": "筛选",
+    "book": "预订",
+    "confirm": "确认",
+    "cancel": "取消",
+    "back": "返回",
+    "save": "保存",
+    "loading": "加载中...",
+    "error": "出错了，请重试"
+  },
+  "property": {
+    "daily": "日租",
+    "monthly": "月租",
+    "per_night": "每晚",
+    "per_month": "每月",
+    "guests": "房客",
+    "bedrooms": "卧室",
+    "bathrooms": "浴室",
+    "available": "可预订",
+    "unavailable": "不可预订"
+  },
+  "booking": {
+    "checkin": "入住",
+    "checkout": "退房",
+    "nights": "晚",
+    "total": "合计",
+    "payment": "付款",
+    "confirm_booking": "确认预订"
+  }
+}

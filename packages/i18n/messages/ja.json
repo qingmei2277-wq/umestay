@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "search": "検索",
+    "favorites": "お気に入り",
+    "messages": "メッセージ",
+    "account": "アカウント",
+    "login": "ログイン",
+    "register": "登録"
+  },
+  "common": {
+    "search": "検索",
+    "filter": "フィルター",
+    "book": "予約する",
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "back": "戻る",
+    "save": "保存",
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました。もう一度お試しください"
+  },
+  "property": {
+    "daily": "日次",
+    "monthly": "月次",
+    "per_night": "1泊",
+    "per_month": "1ヶ月",
+    "guests": "ゲスト",
+    "bedrooms": "ベッドルーム",
+    "bathrooms": "バスルーム",
+    "available": "予約可能",
+    "unavailable": "予約不可"
+  },
+  "booking": {
+    "checkin": "チェックイン",
+    "checkout": "チェックアウト",
+    "nights": "泊",
+    "total": "合計",
+    "payment": "支払い",
+    "confirm_booking": "予約を確定する"
+  }
+}

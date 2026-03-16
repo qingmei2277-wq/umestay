@@ -1,0 +1,18 @@
+{
+  "name": "@umestay/config",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    "./tailwind": "./tailwind.config.base.ts",
+    "./tsconfig": "./tsconfig.json"
+  },
+  "typesVersions": {
+    "*": {
+      "tailwind": ["./tailwind.config.base.ts"]
+    }
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "tailwindcss": "^3.4.3"
+  }
+}
