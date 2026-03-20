@@ -35,8 +35,13 @@ export function FavBtn({ propertyId, initialFaved = false, onToggle, className }
       onClick={(e) => { e.preventDefault(); e.stopPropagation(); void toggle(); }}
       disabled={pending}
       aria-label={faved ? "取消收藏" : "收藏"}
+      // className={cn(
+      //   "p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-sm transition-transform hover:scale-110",
+      //   pending && "opacity-50 cursor-not-allowed",
+      //   className
+      // )}
       className={cn(
-        "p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-sm transition-transform hover:scale-110",
+        "p-2 backdrop-blur-sm shadow-sm transition-transform hover:scale-110",
         pending && "opacity-50 cursor-not-allowed",
         className
       )}
