@@ -24,7 +24,7 @@ export function HeroSection({ locale }: HeroSectionProps) {
 
   return (
     // <section className="relative min-h-[480px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-900 via-primary-700 to-primary-500">
-    <section className="relative min-h-[220px] flex items-center justify-center overflow-hidden bg-stone-50">
+    <section className="relative min-h-[220px] flex items-center justify-center bg-stone-50">
       {/* subtle pattern overlay */}
       <div
         className="absolute inset-0 opacity-10"

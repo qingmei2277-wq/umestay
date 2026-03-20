@@ -52,7 +52,7 @@ export default async function HomePage({ params }: PageProps) {
             {tCommon("view_all")}
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <div className="relative z-0 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {(featured ?? []).map((p: PropertySummaryRow) => (
             <PropertyCard
               key={p.id}

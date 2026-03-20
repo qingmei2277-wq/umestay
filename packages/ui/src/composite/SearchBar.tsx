@@ -53,7 +53,7 @@ export function SearchBar({
 
   const guests    = adults + children;
   const dateLabel = cin && cout
-    ? `${cin.slice(5)} → ${cout.slice(5)}`
+    ? `${cin.slice(5)} ~ ${cout.slice(5)}`
     : cin ? cin.slice(5) : null;
 
   const doSearch = () => {
@@ -142,7 +142,7 @@ export function SearchBar({
 
       {/* Location dropdown */}
       {open === "location" && (
-        <div className="absolute top-[calc(100%+10px)] left-0 w-80 bg-white rounded-xl shadow-[0_8px_40px_rgba(0,0,0,.12)] border border-gray-200 overflow-hidden">
+        <div className="absolute top-[calc(100%+10px)] left-0 w-80 z-[100] bg-white rounded-xl shadow-[0_8px_40px_rgba(0,0,0,.12)] border border-gray-200 overflow-hidden">
           <div className="p-4 pb-2">
             <div className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2.5 border border-gray-200">
               <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -191,7 +191,7 @@ export function SearchBar({
 
       {/* Date picker */}
       {open === "dates" && (
-        <div className="absolute top-[calc(100%+10px)] left-1/2 -translate-x-1/2 z-50">
+        <div className="absolute top-[calc(100%+10px)] left-1/2 -translate-x-1/2 z-[100]">
           <DualCalendar
             checkin={cin}
             checkout={cout}
@@ -204,7 +204,7 @@ export function SearchBar({
 
       {/* Guests dropdown */}
       {open === "guests" && (
-        <div className="absolute top-[calc(100%+10px)] right-0 w-72 bg-white rounded-xl shadow-[0_8px_40px_rgba(0,0,0,.12)] border border-gray-200 p-5">
+        <div className="absolute top-[calc(100%+10px)] right-0 w-72 z-[100] bg-white rounded-xl shadow-[0_8px_40px_rgba(0,0,0,.12)] border border-gray-200 p-5">
           <p className="text-sm font-bold text-gray-900 mb-4">
             {L(locale, "添加人数", "人数を追加", "Add guests")}
           </p>

@@ -145,7 +145,7 @@ export function DualCalendar({
             const isStart = cinD && ds === cin;
             const isEnd   = coutD && ds === cout;
             const inRange = isInRange(d);
-            const marked  = isStart ?? isEnd;
+            const marked = isStart || isEnd;
 
             return (
               <div
@@ -155,8 +155,9 @@ export function DualCalendar({
                 onClick={() => !disabled && handleDay(d)}
                 className={cn(
                   "h-9 flex items-center justify-center",
-                  inRange && "bg-primary-50",
-                  marked && "rounded-full"
+                  (inRange || marked) && "bg-primary-50",  // ← 加上 marked
+                  isStart && "rounded-l-full",             // ← 左端圆角
+                  isEnd   && "rounded-r-full",             // ← 右端圆角
                 )}
               >
                 <div
@@ -189,7 +190,7 @@ export function DualCalendar({
             <div
               key={s}
               className={cn(
-                "flex-1 px-3.5 py-2.5 rounded-lg border",
+                "flex-1 px-3 py-1.5 rounded-lg border",
                 step === s ? "bg-primary-50 border-primary/30" : "bg-gray-50 border-gray-200"
               )}
             >
@@ -202,8 +203,8 @@ export function DualCalendar({
           )
         )}
         {nights && (
-          <div className="px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 flex flex-col items-center justify-center">
-            <span className="text-xl font-bold text-primary">{nights}</span>
+          <div className="px-3 py-1.5 rounded-lg border border-gray-200 bg-gray-50 flex flex-col items-center justify-center">
+            <span className="text-lg font-bold text-primary">{nights}</span>
             <span className="text-[10px] text-gray-400">{l("nights")}</span>
           </div>
         )}
