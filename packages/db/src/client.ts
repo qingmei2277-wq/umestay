@@ -1,5 +1,4 @@
 import { createBrowserClient, createServerClient } from "@supabase/ssr";
-import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "./types";
 
 // ─── Environment helpers ───────────────────────────────────────────────────
@@ -14,7 +13,7 @@ function getEnvVar(key: string): string {
 
 // ─── Browser client (singleton for client components) ─────────────────────
 
-export function createUmestayBrowserClient(): SupabaseClient<Database> {
+export function createUmestayBrowserClient() {
   return createBrowserClient<Database>(
     getEnvVar("NEXT_PUBLIC_SUPABASE_URL"),
     getEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY")
@@ -34,9 +33,7 @@ export type CookieMethods = {
   setAll: (cookies: CookieOptions[]) => void;
 };
 
-export function createUmestayServerClient(
-  cookieMethods: CookieMethods
-): SupabaseClient<Database> {
+export function createUmestayServerClient(cookieMethods: CookieMethods) {
   return createServerClient<Database>(
     getEnvVar("NEXT_PUBLIC_SUPABASE_URL"),
     getEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
@@ -51,7 +48,7 @@ export function createUmestayServerClient(
 
 // ─── Service-role client (server-only, privileged operations) ─────────────
 
-export function createUmestayServiceClient(): SupabaseClient<Database> {
+export function createUmestayServiceClient() {
   return createBrowserClient<Database>(
     getEnvVar("NEXT_PUBLIC_SUPABASE_URL"),
     getEnvVar("SUPABASE_SERVICE_ROLE_KEY")

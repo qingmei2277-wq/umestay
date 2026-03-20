@@ -4,6 +4,7 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./src/i18n.ts");
 
 const nextConfig: NextConfig = {
+  typedRoutes: true,
   images: {
     remotePatterns: [
       {
@@ -17,9 +18,6 @@ const nextConfig: NextConfig = {
         pathname: "/storage/v1/object/public/**",
       },
     ],
-  },
-  experimental: {
-    typedRoutes: true,
   },
 };
 

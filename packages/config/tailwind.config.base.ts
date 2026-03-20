@@ -37,6 +37,11 @@ const config: Omit<Config, "content"> = {
       borderRadius: {
         "4xl": "2rem",
       },
+      boxShadow: {
+        card:  "0 2px 12px rgba(0,0,0,0.08)",
+        hover: "0 6px 24px rgba(0,0,0,0.14)",
+        modal: "0 20px 60px rgba(0,0,0,0.20)",
+      },
     },
   },
   plugins: [],
