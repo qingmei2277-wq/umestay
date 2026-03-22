@@ -44,12 +44,9 @@ export function Nav({
         {/* Logo */}
         <button
           onClick={() => nav("list")}
-          className="flex items-center gap-1.5 flex-shrink-0 p-0 bg-transparent border-none cursor-pointer"
-        >
-          <div className="w-7 h-7 rounded-[6px] bg-primary flex items-center justify-center">
-            <span className="text-white text-xs font-black tracking-tight">U</span>
-          </div>
-          <span className="font-black text-[15px] text-gray-900 tracking-tight">UMESTAY</span>
+          className="flex items-center gap-2 flex-shrink-0 bg-transparent border-none cursor-pointer">
+          <img src="/logo.png" alt="Umestay" width={30} height={30} className="rounded-lg" />
+          <span className="text-base font-bold text-stone-800">Umestay</span>
         </button>
 
         {/* Desktop links */}

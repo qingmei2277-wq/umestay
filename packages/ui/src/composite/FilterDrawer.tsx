@@ -114,7 +114,7 @@ export function FilterDrawer({ open, onClose, value, onChange, locale = "zh" }: 
     set({ amenities: list.includes(id) ? list.filter(x => x !== id) : [...list, id] });
   };
 
-  const clearAll = () => setDraft({ minPrice: 0, maxPrice: 200000, amenities: [], bedrooms: 0, bathrooms: 0, beds: 0 });
+  const clearAll = () => setDraft({ minPrice: 0, maxPrice: 0, amenities: [], bedrooms: 0, bathrooms: 0, beds: 0 });
 
   const apply = () => { onChange(draft); onClose(); };
 

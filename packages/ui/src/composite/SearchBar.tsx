@@ -36,6 +36,7 @@ export function SearchBar({
   className,
 }: SearchBarProps) {
   const [open, setOpen]         = useState<Panel>(null);
+  const [hoveredPanel, setHoveredPanel] = useState<Panel>(null);
   const [loc, setLoc]           = useState(value?.location ?? "");
   const [cin, setCin]           = useState(value?.checkin ?? "");
   const [cout, setCout]         = useState(value?.checkout ?? "");
@@ -61,27 +62,40 @@ export function SearchBar({
     onSearch({ location: loc, checkin: cin, checkout: cout, guests });
   };
 
-  function Seg({
-    id,
-    label,
-    value: val,
-    placeholder,
-    hasBorder,
-  }: {
-    id: Panel;
-    label: string;
-    value: string | null;
-    placeholder: string;
-    hasBorder: boolean;
-  }) {
-    const active = open === id;
-    return (
+function Seg({
+  id,
+  label,
+  value: val,
+  placeholder,
+  hasBorder,
+}: {
+  id: Panel;
+  label: string;
+  value: string | null;
+  placeholder: string;
+  hasBorder: boolean;
+}) {
+  const active = open === id;
+  const nextPanel = id === "location" ? "dates" : id === "dates" ? "guests" : null;
+
+  // 自己被 hover/active，或右侧相邻段被 hover/active，竖线消失
+  const hideDivider =
+    active ||
+    hoveredPanel === id ||
+    open === nextPanel ||
+    hoveredPanel === nextPanel;
+
+  return (
+    <div
+      className="relative flex-1 flex items-center"
+      onMouseEnter={() => setHoveredPanel(id)}
+      onMouseLeave={() => setHoveredPanel(null)}
+    >
       <div
         onClick={() => setOpen(active ? null : id)}
         className={cn(
-          "flex-1 px-4 py-2.5 cursor-pointer rounded-full transition-colors min-w-0",
-          active ? "bg-gray-100" : "hover:bg-gray-50",
-          hasBorder && "border-r border-gray-200"
+          "flex-1 px-6 py-3 cursor-pointer transition-colors min-w-0 rounded-full",
+          active || hoveredPanel === id ? "bg-gray-100" : "",
         )}
       >
         <div className="text-[10px] font-bold text-gray-900 tracking-widest uppercase mb-0.5">
@@ -94,8 +108,17 @@ export function SearchBar({
           {val ?? placeholder}
         </div>
       </div>
-    );
-  }
+
+      {hasBorder && (
+        <div className={cn(
+          "absolute right-0 w-px bg-gray-200 transition-opacity duration-150",
+          "h-[55%]",
+          hideDivider ? "opacity-0" : "opacity-100"
+        )} />
+      )}
+    </div>
+  );
+}
 
   return (
     <div ref={ref} className={cn("relative z-50", className)}>

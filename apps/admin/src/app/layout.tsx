@@ -23,7 +23,7 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" className={plusJakartaSans.variable}>
-      <body className="font-sans antialiased bg-gray-50 text-gray-900">
+      <body className="font-sans antialiased bg-white text-gray-900">
         {children}
       </body>
     </html>

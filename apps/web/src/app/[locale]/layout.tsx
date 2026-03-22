@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { locales, type Locale } from "@umestay/i18n";
+import { AppNav } from "@/components/layout/AppNav";
 import "../globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -43,6 +44,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html lang={locale} className={plusJakartaSans.variable}>
       <body className="font-sans antialiased bg-white text-gray-900">
         <NextIntlClientProvider messages={messages}>
+          <AppNav locale={locale as "zh" | "ja" | "en"} />
           {children}
         </NextIntlClientProvider>
       </body>
