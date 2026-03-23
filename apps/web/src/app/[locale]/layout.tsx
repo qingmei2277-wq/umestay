@@ -3,8 +3,12 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
 import { locales, type Locale } from "@umestay/i18n";
+import { createUmestayServerClient } from "@umestay/db";
+import type { Profile } from "@umestay/db";
 import { AppNav } from "@/components/layout/AppNav";
+import { UserProvider } from "@/components/providers/UserProvider";
 import "../globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -31,6 +35,28 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+async function getInitialProfile(): Promise<Profile | null> {
+  try {
+    const cookieStore = await cookies();
+    const supabase = createUmestayServerClient({
+      getAll: () => cookieStore.getAll(),
+      setAll: () => {},
+    });
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return null;
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", user.id)
+      .single();
+    return data ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
 
@@ -38,14 +64,19 @@ export default async function LocaleLayout({ children, params }: Props) {
     notFound();
   }
 
-  const messages = await getMessages();
+  const [messages, initialProfile] = await Promise.all([
+    getMessages(),
+    getInitialProfile(),
+  ]);
 
   return (
     <html lang={locale} className={plusJakartaSans.variable}>
       <body className="font-sans antialiased bg-white text-gray-900">
         <NextIntlClientProvider messages={messages}>
-          <AppNav locale={locale as "zh" | "ja" | "en"} />
-          {children}
+          <UserProvider initialProfile={initialProfile}>
+            <AppNav locale={locale as "zh" | "ja" | "en"} />
+            {children}
+          </UserProvider>
         </NextIntlClientProvider>
       </body>
     </html>

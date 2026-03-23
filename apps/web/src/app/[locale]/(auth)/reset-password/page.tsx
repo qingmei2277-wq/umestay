@@ -1,22 +1,20 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { AuthTabs } from "@/components/auth/AuthTabs";
+import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ next?: string; error?: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "auth" });
-  return { title: t("login_title") };
+  return { title: t("reset_password_title") };
 }
 
-export default async function LoginPage({ params, searchParams }: PageProps) {
+export default async function ResetPasswordPage({ params }: PageProps) {
   const { locale } = await params;
-  const { next, error } = await searchParams;
   const t = await getTranslations({ locale, namespace: "auth" });
 
   return (
@@ -24,22 +22,28 @@ export default async function LoginPage({ params, searchParams }: PageProps) {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-primary">UMESTAY</h1>
-          <h2 className="mt-2 text-xl font-semibold text-gray-800">{t("login_title")}</h2>
+          <h2 className="mt-2 text-xl font-semibold text-gray-800">
+            {t("reset_password_title")}
+          </h2>
         </div>
 
-        {error && (
-          <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg">{error}</div>
-        )}
-
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          {/* <AuthTabs next={next} /> */}
-          <AuthTabs next={next ?? ""} />
+          <ResetPasswordForm
+            locale={locale}
+            labels={{
+              desc: t("reset_email_desc"),
+              emailLabel: t("email_label"),
+              emailPlaceholder: t("email_placeholder"),
+              submit: t("reset_send"),
+              success: t("reset_email_sent"),
+              loginLink: t("login_link"),
+            }}
+          />
         </div>
 
         <p className="text-center text-sm text-gray-500">
-          {t("no_account")}{" "}
-          <Link href={`/${locale}/register`} className="text-primary font-medium hover:underline">
-            {t("register_link")}
+          <Link href={`/${locale}/login`} className="text-primary hover:underline">
+            ← {t("login_link")}
           </Link>
         </p>
       </div>

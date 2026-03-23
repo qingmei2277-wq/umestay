@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "../utils/cn";
+import { AuthModal } from "./AuthModal";
 
 type Locale = "zh" | "ja" | "en";
 
@@ -18,6 +19,7 @@ interface NavProps {
   onNavigate?: (page: string) => void;
   onLocaleChange?: (locale: Locale) => void;
   onSignOut?: () => void;
+  authModalContent?: React.ReactNode;
 }
 
 const L = (locale: Locale, zh: string, ja: string, en: string) =>
@@ -31,9 +33,11 @@ export function Nav({
   onNavigate,
   onLocaleChange,
   onSignOut,
+  authModalContent,
 }: NavProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false); // ← 新增
 
   const nav = (page: string) => { onNavigate?.(page); setMenuOpen(false); setMobileOpen(false); };
 
@@ -156,13 +160,13 @@ export function Nav({
         ) : (
           <div className="hidden md:flex items-center gap-2">
             <button
-              onClick={() => nav("login")}
+              onClick={() => setAuthOpen(true)}
               className="px-3.5 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
             >
               {L(locale, "登录", "ログイン", "Log in")}
             </button>
             <button
-              onClick={() => nav("register")}
+              onClick={() => setAuthOpen(true)}
               className="px-3.5 py-1.5 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors"
             >
               {L(locale, "注册", "登録", "Sign up")}
@@ -199,10 +203,7 @@ export function Nav({
                 [L(locale, "收藏", "お気に入り", "Favorites"), "favorites"],
               ];
             }
-            return [...base,
-              [L(locale, "登录", "ログイン", "Log in"), "login"],
-              [L(locale, "注册", "登録", "Sign up"), "register"],
-            ];
+            return base;
           })().map(([label, page]) => (
             <button
               key={page}
@@ -212,6 +213,15 @@ export function Nav({
               {label}
             </button>
           ))}
+          {/* Mobile 登录/注册按钮 */}
+          {!user && (
+            <button
+              onClick={() => { setMobileOpen(false); setAuthOpen(true); }}
+              className="block w-full text-left px-3 py-2.5 text-sm font-medium text-primary hover:bg-primary-50 rounded-lg transition-colors"
+            >
+              {L(locale, "登录 / 注册", "ログイン・登録", "Log in / Sign up")}
+            </button>
+          )}
           {user && (
             <>
               <div className="h-px bg-gray-100 my-1" />
@@ -225,6 +235,15 @@ export function Nav({
           )}
         </div>
       )}
+
+      {/* Auth Modal */}
+      <AuthModal
+        open={authOpen}
+        onClose={() => setAuthOpen(false)}
+        title={L(locale, "登录或注册", "ログイン・登録", "Log in or sign up")}
+      >
+        {authModalContent}
+      </AuthModal>
     </nav>
   );
 }

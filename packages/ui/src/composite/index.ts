@@ -1,3 +1,4 @@
+export { AuthModal } from "./AuthModal";
 export { DualCalendar } from "./DualCalendar";
 export type { DualCalendarProps } from "./DualCalendar";
 export { FilterDrawer } from "./FilterDrawer";

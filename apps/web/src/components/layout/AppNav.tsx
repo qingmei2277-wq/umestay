@@ -2,6 +2,8 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { Nav } from "@umestay/ui/composite";
+import { useUser } from "@/components/providers/UserProvider";
+import { AuthModalContent } from "@/components/auth/AuthModalContent";
 
 type Locale = "zh" | "ja" | "en";
 
@@ -12,8 +14,8 @@ interface AppNavProps {
 const PAGE_ROUTES: Record<string, string> = {
   list:       "/",
   properties: "/properties",
-  login:      "/(auth)/login",
-  register:   "/(auth)/register",
+  login:      "/login",
+  register:   "/register",
   messages:   "/messages",
   account:    "/account",
   bookings:   "/bookings",
@@ -23,6 +25,7 @@ const PAGE_ROUTES: Record<string, string> = {
 export function AppNav({ locale }: AppNavProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const { user, signOut } = useUser();
 
   const handleNavigate = (page: string) => {
     const route = PAGE_ROUTES[page] ?? "/";
@@ -30,22 +33,23 @@ export function AppNav({ locale }: AppNavProps) {
   };
 
   const handleLocaleChange = (newLocale: Locale) => {
-    // Replace current locale prefix in the pathname
     const withoutLocale = pathname.replace(new RegExp(`^/${locale}`), "") || "/";
     router.push(`/${newLocale}${withoutLocale}`);
   };
 
-  // Derive currentPage from pathname
   const segment = pathname.replace(new RegExp(`^/${locale}`), "").split("/")[1] ?? "";
   const currentPage =
-    Object.entries(PAGE_ROUTES).find(([, r]) => r.replace("/", "") === segment)?.[0] ?? "list";
+    Object.entries(PAGE_ROUTES).find(([, r]) => r.replace(/^\//, "") === segment)?.[0] ?? "list";
 
   return (
     <Nav
       locale={locale}
       currentPage={currentPage}
+      user={user ? { name: user.name, avatar_url: user.avatar_url } : null}
       onNavigate={handleNavigate}
       onLocaleChange={handleLocaleChange}
+      onSignOut={signOut}
+      authModalContent={<AuthModalContent />}
     />
   );
 }

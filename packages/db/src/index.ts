@@ -5,6 +5,15 @@ export {
 } from "./client";
 
 export type { Database, Json } from "./types";
+export type {
+  Profile, ProfileInsert, ProfileUpdate,
+  KycVerification, KycVerificationInsert,
+  Favorite,
+  Booking, BookingInsert, BookingUpdate,
+  Notification,
+  KycStatus, DocType,
+  UserRole,
+} from "./types";
 export type { CookieMethods, CookieOptions } from "./client";
 
 export {

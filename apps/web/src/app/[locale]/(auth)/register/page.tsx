@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { AuthTabs } from "@/components/auth/AuthTabs";
+import { RegisterTabs } from "@/components/auth/RegisterTabs";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ next?: string; error?: string }>;
+  searchParams: Promise<{ next?: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "auth" });
-  return { title: t("login_title") };
+  return { title: t("register_title") };
 }
 
-export default async function LoginPage({ params, searchParams }: PageProps) {
+export default async function RegisterPage({ params, searchParams }: PageProps) {
   const { locale } = await params;
-  const { next, error } = await searchParams;
+  const { next } = await searchParams;
   const t = await getTranslations({ locale, namespace: "auth" });
 
   return (
@@ -24,22 +24,17 @@ export default async function LoginPage({ params, searchParams }: PageProps) {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-primary">UMESTAY</h1>
-          <h2 className="mt-2 text-xl font-semibold text-gray-800">{t("login_title")}</h2>
+          <h2 className="mt-2 text-xl font-semibold text-gray-800">{t("register_title")}</h2>
         </div>
 
-        {error && (
-          <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg">{error}</div>
-        )}
-
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          {/* <AuthTabs next={next} /> */}
-          <AuthTabs next={next ?? ""} />
+          <RegisterTabs next={next} />
         </div>
 
         <p className="text-center text-sm text-gray-500">
-          {t("no_account")}{" "}
-          <Link href={`/${locale}/register`} className="text-primary font-medium hover:underline">
-            {t("register_link")}
+          {t("has_account")}{" "}
+          <Link href={`/${locale}/login`} className="text-primary font-medium hover:underline">
+            {t("login_link")}
           </Link>
         </p>
       </div>
