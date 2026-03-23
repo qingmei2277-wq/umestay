@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DualCalendar } from "@umestay/ui/composite";
 import { Stars } from "@umestay/ui";
@@ -107,9 +107,21 @@ export function BookingCard({
     ? `¥${unitPrice.toLocaleString()} / ${isMonthly ? t.perMonth : t.perNight}`
     : "–";
 
+  const calRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (calRef.current && !calRef.current.contains(e.target as Node)) {
+        setCalOpen(false);
+      }
+    };
+    if (calOpen) document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [calOpen]);
+
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl shadow-card p-5 sticky top-24">
-      {/* Price */}
+    <div className="bg-white border border-gray-200 rounded-2xl shadow-card p-5 sticky top-24 relative">  
+    {/* Price */}
       <div className="flex items-baseline gap-1 mb-5">
         <span className="text-2xl font-bold text-gray-900">
           ¥{unitPrice?.toLocaleString() ?? "–"}
@@ -128,7 +140,10 @@ export function BookingCard({
         className="w-full border border-gray-200 rounded-xl px-4 py-3 text-left text-sm mb-3 hover:border-gray-400 transition-colors"
       >
         {checkin && checkout ? (
-          <span className="text-gray-900">{checkin} → {checkout}</span>
+          // <span className="text-gray-900">{checkin} ~ {checkout}</span>
+          <span className="text-gray-900">
+            {checkin.replace(/-/g, "/")} ~ {checkout.replace(/-/g, "/")}
+          </span>
         ) : (
           <span className="text-gray-400">{t.selectDates}</span>
         )}
@@ -191,22 +206,20 @@ export function BookingCard({
 
       {/* Calendar modal */}
       {calOpen && (
-        <div className="fixed inset-0 z-[800] flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setCalOpen(false)} />
-          <div className="relative z-10">
-            <DualCalendar
-              checkin={checkin || null}
-              checkout={checkout || null}
-              onRangeChange={(start, end) => {
-                setCheckin(start);
-                setCheckout(end);
-                setCalOpen(false);
-              }}
-              onClose={() => setCalOpen(false)}
-              blockedDates={blockedDates.map(d => new Date(`${d}T00:00:00`))}
-              locale={locale}
-            />
-          </div>
+        // <div className="absolute top-[60px] left-1/5 -translate-x-1/2 z-[800]">
+        <div ref={calRef} className="absolute top-[60px] -left-[290px] z-[800]">
+          <DualCalendar
+            checkin={checkin || null}
+            checkout={checkout || null}
+            onRangeChange={(start, end) => {
+              setCheckin(start);
+              setCheckout(end);
+              if (end) setCalOpen(false);  // 只有 end 有值才关闭
+            }}
+            onClose={() => setCalOpen(false)}
+            blockedDates={blockedDates.map(d => new Date(`${d}T00:00:00`))}
+            locale={locale}
+          />
         </div>
       )}
     </div>

@@ -53,9 +53,18 @@ export function SearchBar({
   }, []);
 
   const guests    = adults + children;
+  function formatDate(dateStr: string, locale: Locale) {
+    const parts = dateStr.split("-");
+    const month = parseInt(parts[1] ?? "0");
+    const day = parseInt(parts[2] ?? "0");
+    if (locale === "zh") return `${month}月${day}日`;
+    if (locale === "ja") return `${month}月${day}日`;
+    return `${month}/${day}`;  // 英文用 4/1 格式
+    }
+
   const dateLabel = cin && cout
-    ? `${cin.slice(5)} ~ ${cout.slice(5)}`
-    : cin ? cin.slice(5) : null;
+    ? `${formatDate(cin, locale)} - ${formatDate(cout, locale)}`
+    : cin ? formatDate(cin, locale) : null;
 
   const doSearch = () => {
     setOpen(null);
