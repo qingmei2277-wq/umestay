@@ -87,7 +87,9 @@
     "gallery_count": "{count} photos"
   },
   "auth": {
-    "login_title": "Welcome back",
+    "login_title": "Log in",
+    "continue": "Continue",
+    "back": "Back",
     "register_title": "Create your account",
     "tab_email": "Email",
     "tab_phone": "Phone",
@@ -124,9 +126,10 @@
     "update_password": "Update password",
     "password_updated": "Password updated. Please log in again.",
     "back_label": "Back",
-    "welcome_label": "Log in or sign up",
+    "welcome_label": "Welcome to Umestay",
     "or_label": "or",
-    "continue_with_email": "Continue with email"
+    "continue_with_email": "Continue with email",
+    "continue_with_phone": "Continue with phone"
   },
   "account": {
     "overview_title": "My Account",

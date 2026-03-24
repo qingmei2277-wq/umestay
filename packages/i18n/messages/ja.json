@@ -87,7 +87,9 @@
     "gallery_count": "全{count}枚"
   },
   "auth": {
-    "login_title": "おかえりなさい",
+    "login_title": "ログイン",
+    "continue": "続行",
+    "back": "戻る",
     "register_title": "アカウントを作成",
     "tab_email": "メールでログイン",
     "tab_phone": "電話番号でログイン",
@@ -124,9 +126,10 @@
     "update_password": "パスワードを更新",
     "password_updated": "パスワードを更新しました。再度ログインしてください",
     "back_label": "戻る",
-    "welcome_label": "ログイン・登録",
+    "welcome_label": "Umestayへようこそ",
     "or_label": "または",
-    "continue_with_email": "メールで続ける"
+    "continue_with_email": "メールアドレスでログインする",
+     "continue_with_phone": "電話番号でログイン"
   },
   "account": {
     "overview_title": "マイアカウント",

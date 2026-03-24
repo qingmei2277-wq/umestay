@@ -87,7 +87,9 @@
     "gallery_count": "共 {count} 张"
   },
   "auth": {
-    "login_title": "欢迎回来",
+    "login_title": "登录",
+    "continue": "继续",
+    "back": "返回",
     "register_title": "创建账户",
     "tab_email": "邮箱登录",
     "tab_phone": "手机号登录",
@@ -124,9 +126,10 @@
     "update_password": "更新密码",
     "password_updated": "密码已更新，请重新登录",
     "back_label": "返回",
-    "welcome_label": "登录或注册",
+    "welcome_label": "Umestay欢迎您",
     "or_label": "或",
-    "continue_with_email": "使用邮箱继续"
+    "continue_with_email": "使用邮箱登录",
+    "continue_with_phone": "使用手机号登录"
   },
   "account": {
     "overview_title": "我的账户",
