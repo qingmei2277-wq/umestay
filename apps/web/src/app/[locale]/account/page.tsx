@@ -15,6 +15,41 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return { title: t("overview_title") };
 }
 
+const quickLinkIcons: Record<string, React.ReactNode> = {
+  profile: (
+    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+  ),
+  bookings: (
+    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+    </svg>
+  ),
+  favorites: (
+    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+    </svg>
+  ),
+  messages: (
+    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 11h.01M16 11h.01M8 11h.01" />
+    </svg>
+  ),
+  verification: (
+    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0" />
+    </svg>
+  ),
+  settings: (
+    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+  ),
+};
+
 export default async function AccountPage({ params }: PageProps) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "account" });
@@ -41,36 +76,12 @@ export default async function AccountPage({ params }: PageProps) {
   const favCount = favCountRes.count ?? 0;
 
   const quickLinks = [
-    {
-      href: `/${locale}/account/profile`,
-      icon: "👤",
-      label: t("profile_title"),
-    },
-    {
-      href: `/${locale}/bookings`,
-      icon: "📋",
-      label: t("my_bookings"),
-    },
-    {
-      href: `/${locale}/favorites`,
-      icon: "❤️",
-      label: t("my_favorites"),
-    },
-    {
-      href: `/${locale}/messages`,
-      icon: "💬",
-      label: t("my_messages"),
-    },
-    {
-      href: `/${locale}/account/verification`,
-      icon: "🪪",
-      label: t("verification_title"),
-    },
-    {
-      href: `/${locale}/account/settings`,
-      icon: "⚙️",
-      label: t("settings_title"),
-    },
+    { href: `/${locale}/account/profile`,       iconKey: "profile",       label: t("profile_title") },
+    { href: `/${locale}/bookings`,               iconKey: "bookings",      label: t("my_bookings") },
+    { href: `/${locale}/favorites`,              iconKey: "favorites",     label: t("my_favorites") },
+    { href: `/${locale}/messages`,               iconKey: "messages",      label: t("my_messages") },
+    { href: `/${locale}/account/verification`,   iconKey: "verification",  label: t("verification_title") },
+    { href: `/${locale}/account/settings`,       iconKey: "settings",      label: t("settings_title") },
   ];
 
   return (
@@ -80,11 +91,7 @@ export default async function AccountPage({ params }: PageProps) {
         <div className="w-16 h-16 rounded-full bg-primary-100 border border-primary/20 overflow-hidden flex items-center justify-center flex-shrink-0">
           {profile?.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={profile.avatar_url}
-              alt={profile.name ?? ""}
-              className="w-full h-full object-cover"
-            />
+            <img src={profile.avatar_url} alt={profile.name ?? ""} className="w-full h-full object-cover" />
           ) : (
             <span className="text-primary text-2xl font-semibold">
               {(profile?.name ?? user.email ?? "U")[0].toUpperCase()}
@@ -120,9 +127,11 @@ export default async function AccountPage({ params }: PageProps) {
           <Link
             key={item.href}
             href={item.href}
-            className="flex flex-col items-center gap-2 bg-white border border-gray-200 rounded-xl p-4 hover:border-primary hover:bg-primary-50 transition-colors text-center"
+            className="flex flex-col items-center gap-2 bg-white border border-gray-200 rounded-xl p-4 hover:border-primary hover:bg-primary-50 transition-colors text-center group"
           >
-            <span className="text-2xl">{item.icon}</span>
+            <span className="text-gray-500 group-hover:text-primary transition-colors">
+              {quickLinkIcons[item.iconKey]}
+            </span>
             <span className="text-sm font-medium text-gray-700">{item.label}</span>
           </Link>
         ))}

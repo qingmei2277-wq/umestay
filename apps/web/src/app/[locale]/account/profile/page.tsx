@@ -53,18 +53,28 @@ export default async function ProfilePage({ params }: PageProps) {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (!user) redirect("/zh/login");
+    if (!user) redirect(`/${locale}/login?next=/${locale}/account/profile`);
 
-    await supabase
+    const phone = (formData.get("phone") as string).trim();
+
+    // phone 必须符合 E.164 格式，为空时不更新（保留原值）
+    const updates: Record<string, string | null> = {
+      name: formData.get("name") as string,
+      preferred_lang: formData.get("preferred_lang") as string,
+    };
+    if (phone) updates.phone = phone;
+
+    const { error } = await supabase
       .from("profiles")
-      .update({
-        name: formData.get("name") as string,
-        phone: formData.get("phone") as string,
-        preferred_lang: formData.get("preferred_lang") as string,
-      })
+      .update(updates)
       .eq("user_id", user.id);
 
-    revalidatePath(`/[locale]/account/profile`, "page");
+    if (error) {
+      console.error("[updateProfile] DB error:", error.message);
+      throw new Error(error.message);
+    }
+
+    revalidatePath(`/${locale}/account/profile`);
   }
 
   const langOptions = [
