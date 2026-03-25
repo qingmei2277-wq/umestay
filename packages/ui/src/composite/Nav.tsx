@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { cn } from "../utils/cn";
 import { AuthModal } from "./AuthModal";
 
@@ -37,7 +37,20 @@ export function Nav({
 }: NavProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false); // ← 新增
+  const [authOpen, setAuthOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // 监听全局点击，点击下拉菜单外部时关闭
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [menuOpen]);
 
   const nav = (page: string) => { onNavigate?.(page); setMenuOpen(false); setMobileOpen(false); };
 
@@ -96,67 +109,88 @@ export function Nav({
         )}
 
         {user ? (
-          <>
-            {/* Messages */}
+          /* Avatar + dropdown，ref 绑定到整个容器 */
+          <div ref={menuRef} className="relative hidden md:block">
             <button
-              onClick={() => nav("messages")}
-              className="relative p-2 text-gray-500 hover:text-gray-900 transition-colors hidden md:flex"
+              onClick={() => setMenuOpen(o => !o)}
+              className="w-8 h-8 rounded-full bg-primary-100 border border-primary/20 overflow-hidden flex items-center justify-center"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-              {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
-                  {unreadCount > 9 ? "9+" : unreadCount}
+              {user.avatar_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={user.avatar_url} alt={user.name ?? ""} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-primary text-sm font-semibold">
+                  {(user.name ?? "U")[0]}
                 </span>
               )}
             </button>
 
-            {/* Avatar + dropdown */}
-            <div className="relative hidden md:block">
-              <button
-                onClick={() => setMenuOpen(o => !o)}
-                className="w-8 h-8 rounded-full bg-primary-100 border border-primary/20 overflow-hidden flex items-center justify-center"
-              >
-                {user.avatar_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={user.avatar_url} alt={user.name ?? ""} className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-primary text-sm font-semibold">
-                    {(user.name ?? "U")[0]}
-                  </span>
-                )}
-              </button>
-
-              {menuOpen && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                  <div className="absolute right-0 top-full mt-2 w-44 bg-white border border-gray-200 rounded-xl shadow-modal z-50 py-1 overflow-hidden">
-                    {([
-                      [L(locale, "账户", "アカウント", "Account"), "account"],
-                      [L(locale, "我的订单", "予約一覧", "My Bookings"), "bookings"],
-                      [L(locale, "收藏", "お気に入り", "Favorites"), "favorites"],
-                    ] as [string, string][]).map(([label, page]) => (
-                      <button
-                        key={page}
-                        onClick={() => nav(page)}
-                        className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                      >
-                        {label}
-                      </button>
-                    ))}
-                    <div className="h-px bg-gray-100 mx-3 my-1" />
-                    <button
-                      onClick={() => { onSignOut?.(); setMenuOpen(false); }}
-                      className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                    >
-                      {L(locale, "退出", "ログアウト", "Sign out")}
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          </>
+            {menuOpen && (
+              <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-modal z-[301] py-1.5 overflow-hidden">
+                {([
+                  [
+                    L(locale, "消息", "メッセージ", "Messages"),
+                    "messages",
+                    <svg key="messages" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 11h.01M16 11h.01M8 11h.01" />
+                    </svg>,
+                    unreadCount > 0 ? unreadCount : null,
+                  ],
+                  [
+                    L(locale, "账户", "アカウント", "Account"),
+                    "account",
+                    <svg key="account" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>,
+                    null,
+                  ],
+                  [
+                    L(locale, "我的订单", "予約一覧", "My Bookings"),
+                    "bookings",
+                    <svg key="bookings" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>,
+                    null,
+                  ],
+                  [
+                    L(locale, "收藏", "お気に入り", "Favorites"),
+                    "favorites",
+                    <svg key="favorites" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>,
+                    null,
+                  ],
+                ] as [string, string, React.ReactNode, number | null][]).map(([label, page, icon, badge]) => (
+                  <button
+                    key={page}
+                    onClick={() => nav(page)}
+                    className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-3"
+                  >
+                    <span className="text-gray-700 relative">
+                      {icon}
+                      {badge && (
+                        <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-500 text-white text-[8px] font-bold rounded-full flex items-center justify-center">
+                          {badge > 9 ? "9+" : badge}
+                        </span>
+                      )}
+                    </span>
+                    {label}
+                  </button>
+                ))}
+                <div className="h-px bg-gray-100 mx-3 my-1" />
+                <button
+                  onClick={() => { onSignOut?.(); setMenuOpen(false); }}
+                  className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors flex items-center gap-3"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  {L(locale, "退出", "ログアウト", "Sign out")}
+                </button>
+              </div>
+            )}
+          </div>
         ) : (
           <div className="hidden md:flex items-center gap-2">
             <button
@@ -213,7 +247,6 @@ export function Nav({
               {label}
             </button>
           ))}
-          {/* Mobile 登录/注册按钮 */}
           {!user && (
             <button
               onClick={() => { setMobileOpen(false); setAuthOpen(true); }}
