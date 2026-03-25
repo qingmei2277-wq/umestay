@@ -139,8 +139,8 @@ export async function updatePasswordAction(formData: FormData) {
 
 // ── 退出登录 ──────────────────────────────────────────────────────────────────
 
-export async function signOutAction() {
+export async function signOutAction(locale = "zh") {
   const supabase = await createActionClient();
   await supabase.auth.signOut();
-  redirect("/zh");
+  redirect(`/${locale}`);
 }

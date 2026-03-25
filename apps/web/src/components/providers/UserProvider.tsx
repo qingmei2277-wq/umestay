@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { createUmestayBrowserClient } from "@umestay/db";
 import type { Profile } from "@umestay/db";
+import { signOutAction } from "@/actions/auth";
 
 interface UserContextValue {
   user: Profile | null;
@@ -51,11 +52,9 @@ export function UserProvider({
   }, []);
 
   const signOut = async () => {
-    const supabase = createUmestayBrowserClient();
-    await supabase.auth.signOut();
     setProfile(null);
     const locale = window.location.pathname.split("/")[1] || "zh";
-    window.location.href = `/${locale}`;
+    await signOutAction(locale);
   };
 
   return (
