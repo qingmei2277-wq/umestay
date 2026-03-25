@@ -5,6 +5,7 @@ import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ error?: string; detail?: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -13,8 +14,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return { title: t("reset_password_title") };
 }
 
-export default async function ResetPasswordPage({ params }: PageProps) {
+export default async function ResetPasswordPage({ params, searchParams }: PageProps) {
   const { locale } = await params;
+  const { error, detail } = await searchParams;
   const t = await getTranslations({ locale, namespace: "auth" });
 
   return (
@@ -27,18 +29,17 @@ export default async function ResetPasswordPage({ params }: PageProps) {
           </h2>
         </div>
 
+        {error === "invalid_link" && (
+          <div className="bg-red-50 text-red-600 text-sm p-4 rounded-xl text-center space-y-1">
+            <p>{t("reset_link_invalid")}</p>
+            {detail && (
+              <p className="text-xs text-red-400 break-all">{detail}</p>
+            )}
+          </div>
+        )}
+
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <ResetPasswordForm
-            locale={locale}
-            labels={{
-              desc: t("reset_email_desc"),
-              emailLabel: t("email_label"),
-              emailPlaceholder: t("email_placeholder"),
-              submit: t("reset_send"),
-              success: t("reset_email_sent"),
-              loginLink: t("login_link"),
-            }}
-          />
+          <ResetPasswordForm />
         </div>
 
         <p className="text-center text-sm text-gray-500">

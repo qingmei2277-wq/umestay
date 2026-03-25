@@ -150,7 +150,7 @@ export function Nav({
                       onClick={() => { onSignOut?.(); setMenuOpen(false); }}
                       className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
                     >
-                      {L(locale, "退出登录", "ログアウト", "Sign out")}
+                      {L(locale, "退出", "ログアウト", "Sign out")}
                     </button>
                   </div>
                 </>
@@ -229,7 +229,7 @@ export function Nav({
                 onClick={() => { onSignOut?.(); setMobileOpen(false); }}
                 className="block w-full text-left px-3 py-2.5 text-sm text-red-500 hover:bg-red-50 rounded-lg transition-colors"
               >
-                {L(locale, "退出登录", "ログアウト", "Sign out")}
+                {L(locale, "退出", "ログアウト", "Sign out")}
               </button>
             </>
           )}

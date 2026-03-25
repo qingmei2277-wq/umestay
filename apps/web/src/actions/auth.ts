@@ -105,20 +105,36 @@ export async function registerPhoneAction(formData: FormData) {
 
 export async function resetPasswordAction(formData: FormData) {
   const email = formData.get("email") as string;
+  const locale = (formData.get("locale") as string) || "zh";
   const supabase = await createActionClient();
-  const { error } = await supabase.auth.resetPasswordForEmail(email);
+  const appUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3100";
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${appUrl}/auth/callback?next=/${locale}/update-password`,
+  });
   if (error) return { error: error.message };
   return { success: true };
 }
 
-// ── 更新新密码（需已登录的重置会话）──────────────────────────────────────────
+// ── 更新新密码 ────────────────────────────────────────────────────────────────
+// 若携带 token_hash（来自重置邮件），先完成 verifyOtp 再更新密码，
+// 在同一 Server Action 上下文中完成，避免 session cookie 跨 redirect 丢失。
 
 export async function updatePasswordAction(formData: FormData) {
   const password = formData.get("password") as string;
+  const tokenHash = formData.get("token_hash") as string | null;
   const supabase = await createActionClient();
+
+  if (tokenHash) {
+    const { error } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: "recovery",
+    });
+    if (error) return { error: error.message };
+  }
+
   const { error } = await supabase.auth.updateUser({ password });
   if (error) return { error: error.message };
-  redirect("/zh");
+  redirect("/zh/account");
 }
 
 // ── 退出登录 ──────────────────────────────────────────────────────────────────

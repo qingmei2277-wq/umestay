@@ -6,8 +6,9 @@ import { useTranslations } from "next-intl";
 import { PhoneLoginForm } from "./PhoneLoginForm";
 import { EmailLoginForm } from "./EmailLoginForm";
 import { EmailRegisterForm } from "./EmailRegisterForm";
+import { ResetPasswordForm } from "./ResetPasswordForm";
 
-type View = "main" | "phone" | "email-register";
+type View = "main" | "phone" | "email-register" | "reset-password";
 
 export function AuthModalContent() {
   const t = useTranslations("auth");
@@ -53,14 +54,25 @@ export function AuthModalContent() {
     );
   }
 
+  if (view === "reset-password") {
+    return (
+      <div className="space-y-4">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">{t("forgot_password")}</h2>
+        <ResetPasswordForm
+          onBack={() => setView("main")}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-gray-900 mb-4">{t("welcome_label")}</h2>
 
-      {/* 邮箱登录（主入口），密码步骤时显示注册入口 */}
       <EmailLoginForm
         next={next}
         onRegister={() => setView("email-register")}
+        onForgotPassword={() => setView("reset-password")}
       />
 
       {/* 分割线 */}

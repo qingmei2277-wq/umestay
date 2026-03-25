@@ -1,17 +1,16 @@
 "use client";
 
 import { useTransition, useState } from "react";
-import Link from "next/link";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { loginAction } from "@/actions/auth";
 
 interface EmailLoginFormProps {
   next?: string;
   onRegister?: () => void;
+  onForgotPassword?: () => void;
 }
 
-export function EmailLoginForm({ next, onRegister }: EmailLoginFormProps) {
-  const locale = useLocale();
+export function EmailLoginForm({ next, onRegister, onForgotPassword }: EmailLoginFormProps) {
   const t = useTranslations("auth");
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -70,9 +69,13 @@ export function EmailLoginForm({ next, onRegister }: EmailLoginFormProps) {
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               {t("password_label")}
             </label>
-            <Link href={`/${locale}/reset-password`} className="text-xs text-primary hover:underline">
+            <button
+              type="button"
+              onClick={onForgotPassword}
+              className="text-xs text-primary hover:underline"
+            >
               {t("forgot_password")}
-            </Link>
+            </button>
           </div>
           <div className="relative">
             <input
@@ -113,7 +116,6 @@ export function EmailLoginForm({ next, onRegister }: EmailLoginFormProps) {
         {pending ? "..." : step === "email" ? t("continue") : t("login_title")}
       </button>
 
-      {/* 第二步：返回 + 注册入口 */}
       {step === "password" && (
         <>
           <button
