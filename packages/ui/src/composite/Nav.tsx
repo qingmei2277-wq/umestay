@@ -20,6 +20,7 @@ interface NavProps {
   onLocaleChange?: (locale: Locale) => void;
   onSignOut?: () => void;
   authModalContent?: React.ReactNode;
+  searchBar?: React.ReactNode;
 }
 
 const L = (locale: Locale, zh: string, ja: string, en: string) =>
@@ -34,6 +35,7 @@ export function Nav({
   onLocaleChange,
   onSignOut,
   authModalContent,
+  searchBar,
 }: NavProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -63,31 +65,41 @@ export function Nav({
           onClick={() => nav("list")}
           className="flex items-center gap-2 flex-shrink-0 bg-transparent border-none cursor-pointer">
           <img src="/logo.png" alt="Umestay" width={30} height={30} className="rounded-lg" />
-          <span className="text-base font-bold text-stone-800">Umestay</span>
+          {/* <span className="text-base font-bold text-stone-800">Umestay</span> */}
+          <span className="text-base font-bold text-primary-500">UMESTAY</span>
         </button>
 
-        {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-1 ml-2">
-          {([
-            [L(locale, "首页", "トップ", "Home"), "list"],
-            [L(locale, "房源", "物件", "Listings"), "properties"],
-          ] as [string, string][]).map(([label, page]) => (
-            <button
-              key={page}
-              onClick={() => nav(page)}
-              className={cn(
-                "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
-                currentPage === page
-                  ? "text-primary bg-primary-50"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-              )}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        {/* Desktop links — 有搜索框时隐藏 */}
+        {!searchBar && (
+          <div className="hidden md:flex items-center gap-1 ml-2">
+            {([
+              [L(locale, "首页", "トップ", "Home"), "list"],
+              [L(locale, "房源", "物件", "Listings"), "properties"],
+            ] as [string, string][]).map(([label, page]) => (
+              <button
+                key={page}
+                onClick={() => nav(page)}
+                className={cn(
+                  "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
+                  currentPage === page
+                    ? "text-primary bg-primary-50"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                )}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
 
-        <div className="flex-1" />
+        {/* 搜索框居中 / 普通 spacer */}
+        {searchBar ? (
+          <div className="hidden md:flex flex-1 justify-center px-4">
+            {searchBar}
+          </div>
+        ) : (
+          <div className="flex-1" />
+        )}
 
         {/* Locale switcher */}
         {onLocaleChange && (
