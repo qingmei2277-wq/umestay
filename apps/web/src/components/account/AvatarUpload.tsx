@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { createUmestayBrowserClient } from "@umestay/db";
+import { useUser } from "@/components/providers/UserProvider";
 
 interface AvatarUploadProps {
   userId: string;
@@ -11,36 +11,39 @@ interface AvatarUploadProps {
 }
 
 export function AvatarUpload({
-  userId,
   currentAvatarUrl,
   name,
   uploadLabel,
 }: AvatarUploadProps) {
   const [avatarUrl, setAvatarUrl] = useState(currentAvatarUrl);
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { patchProfile } = useUser();
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
     setUploading(true);
+    setError(null);
+
     try {
-      const supabase = createUmestayBrowserClient();
-      const { data, error } = await supabase.storage
-        .from("avatars")
-        .upload(`${userId}/avatar.webp`, file, { upsert: true });
-      if (error) throw error;
-      const { data: urlData } = supabase.storage
-        .from("avatars")
-        .getPublicUrl(data.path);
-      const publicUrl = `${urlData.publicUrl}?t=${Date.now()}`;
-      setAvatarUrl(publicUrl);
-      await supabase
-        .from("profiles")
-        .update({ avatar_url: publicUrl })
-        .eq("user_id", userId);
+      const body = new FormData();
+      body.append("file", file);
+
+      const res = await fetch("/api/avatar", { method: "POST", body });
+      const json = await res.json();
+
+      if (!res.ok) throw new Error(json.error ?? "上传失败，请重试");
+
+      setAvatarUrl(json.url);
+      patchProfile({ avatar_url: json.url });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "上传失败，请重试");
     } finally {
       setUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
     }
   };
 
@@ -65,6 +68,7 @@ export function AvatarUpload({
           </div>
         )}
       </button>
+
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
@@ -73,10 +77,15 @@ export function AvatarUpload({
       >
         {uploadLabel}
       </button>
+
+      {error && (
+        <p className="text-xs text-red-500 text-center max-w-[200px]">{error}</p>
+      )}
+
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/webp"
         className="hidden"
         onChange={handleFileChange}
       />

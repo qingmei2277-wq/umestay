@@ -9,12 +9,16 @@ interface UserContextValue {
   user: Profile | null;
   loading: boolean;
   signOut: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
+  patchProfile: (patch: Partial<Profile>) => void;
 }
 
 const UserContext = createContext<UserContextValue>({
   user: null,
   loading: true,
   signOut: async () => {},
+  refreshProfile: async () => {},
+  patchProfile: () => {},
 });
 
 export function UserProvider({
@@ -51,6 +55,22 @@ export function UserProvider({
     return () => subscription.unsubscribe();
   }, []);
 
+  const refreshProfile = async () => {
+    const supabase = createUmestayBrowserClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", user.id)
+      .single();
+    if (data) setProfile(data);
+  };
+
+  const patchProfile = (patch: Partial<Profile>) => {
+    setProfile((prev) => (prev ? { ...prev, ...patch } : null));
+  };
+
   const signOut = async () => {
     setProfile(null);
     const locale = window.location.pathname.split("/")[1] || "zh";
@@ -58,7 +78,7 @@ export function UserProvider({
   };
 
   return (
-    <UserContext.Provider value={{ user: profile, loading, signOut }}>
+    <UserContext.Provider value={{ user: profile, loading, signOut, refreshProfile, patchProfile }}>
       {children}
     </UserContext.Provider>
   );

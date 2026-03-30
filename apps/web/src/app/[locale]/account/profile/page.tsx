@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { createUmestayServerClient } from "@umestay/db";
 import { AvatarUpload } from "@/components/account/AvatarUpload";
+import { ProfileForm } from "@/components/account/ProfileForm";
+import { updateProfileAction } from "@/actions/profile";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -14,6 +15,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "account" });
   return { title: t("profile_title") };
+}
+
+// 将 E.164 号码拆分为区号 + 本地号码
+const KNOWN_CODES = ["+852", "+853", "+886", "+86", "+81", "+82", "+65", "+61", "+44", "+33", "+49", "+1", "+7"];
+function parseE164(e164: string | null | undefined): { countryCode: string; local: string } {
+  if (!e164 || !e164.startsWith("+")) return { countryCode: "+86", local: "" };
+  for (const code of KNOWN_CODES) {
+    if (e164.startsWith(code)) return { countryCode: code, local: e164.slice(code.length) };
+  }
+  return { countryCode: "+86", local: e164.slice(1) };
 }
 
 export default async function ProfilePage({ params }: PageProps) {
@@ -37,45 +48,7 @@ export default async function ProfilePage({ params }: PageProps) {
     .eq("user_id", user.id)
     .single();
 
-  async function updateProfile(formData: FormData) {
-    "use server";
-    const cookieStore = await cookies();
-    const supabase = createUmestayServerClient({
-      getAll: () => cookieStore.getAll(),
-      setAll: (cookiesToSet) => {
-        try {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          );
-        } catch {}
-      },
-    });
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) redirect(`/${locale}/login?next=/${locale}/account/profile`);
-
-    const phone = (formData.get("phone") as string).trim();
-
-    // phone 必须符合 E.164 格式，为空时不更新（保留原值）
-    const updates: Record<string, string | null> = {
-      name: formData.get("name") as string,
-      preferred_lang: formData.get("preferred_lang") as string,
-    };
-    if (phone) updates.phone = phone;
-
-    const { error } = await supabase
-      .from("profiles")
-      .update(updates)
-      .eq("user_id", user.id);
-
-    if (error) {
-      console.error("[updateProfile] DB error:", error.message);
-      throw new Error(error.message);
-    }
-
-    revalidatePath(`/${locale}/account/profile`);
-  }
+  const { countryCode, local: localPhone } = parseE164(profile?.phone);
 
   const langOptions = [
     { value: "zh", label: t("preferred_lang_zh") },
@@ -97,59 +70,22 @@ export default async function ProfilePage({ params }: PageProps) {
         />
       </div>
 
-      {/* 表单 */}
-      <form action={updateProfile} className="space-y-5">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-            {t("name_label")}
-          </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            defaultValue={profile?.name ?? ""}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-            {t("phone_label")}
-          </label>
-          <input
-            id="phone"
-            name="phone"
-            type="tel"
-            defaultValue={profile?.phone ?? ""}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="preferred_lang" className="block text-sm font-medium text-gray-700 mb-1">
-            {t("preferred_lang_label")}
-          </label>
-          <select
-            id="preferred_lang"
-            name="preferred_lang"
-            defaultValue={profile?.preferred_lang ?? locale}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none bg-white"
-          >
-            {langOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-primary text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-primary-600 transition-colors"
-        >
-          {t("save_profile")}
-        </button>
-      </form>
+      <ProfileForm
+        locale={locale}
+        defaultName={profile?.name ?? ""}
+        countryCode={countryCode}
+        localPhone={localPhone}
+        preferredLang={profile?.preferred_lang ?? locale}
+        langOptions={langOptions}
+        labels={{
+          name: t("name_label"),
+          phone: t("phone_label"),
+          preferredLang: t("preferred_lang_label"),
+          save: t("save_profile"),
+          saved: t("profile_saved"),
+        }}
+        updateProfile={updateProfileAction}
+      />
     </main>
   );
 }

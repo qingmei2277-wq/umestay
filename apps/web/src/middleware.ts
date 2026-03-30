@@ -42,7 +42,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next|_vercel|auth|.*\\..*).*)",
+    "/((?!_next|_vercel|auth|api|.*\\..*).*)",
     "/",
     "/(zh|ja|en)/:path*",
   ],
