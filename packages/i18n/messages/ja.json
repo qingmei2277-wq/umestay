@@ -119,12 +119,10 @@
     "resend_otp": "再送する",
     "resend_countdown": "{s}秒後に再送",
     "reset_password_title": "パスワードをリセット",
-    
     "reset_password_desc": "登録のメールアドレスを入力してください。パスワード再設定のリンクをお送りします",
     "reset_password_submit": "再設定メールを送信",
     "reset_email_sent": "再設定メールを送信しました。受信トレイをご確認ください",
     "back_to_login": "ログインに戻る",
-
     "reset_link_invalid": "リンクが無効または使用済みです。再度リセットメールを送信してください",
     "new_password_label": "新しいパスワード",
     "update_password": "パスワードを更新",
@@ -134,7 +132,7 @@
     "welcome_label": "Umestayへようこそ",
     "or_label": "または",
     "continue_with_email": "メールアドレスでログインする",
-     "continue_with_phone": "電話番号でログイン"
+    "continue_with_phone": "電話番号でログイン"
   },
   "account": {
     "overview_title": "マイアカウント",
@@ -183,7 +181,24 @@
     "danger_zone": "危険なゾーン",
     "delete_account": "アカウント削除",
     "delete_confirm": "削除後はデータを復元できません。続けますか？",
-    "sign_out": "ログアウト"
+    "sign_out": "ログアウト",
+    "account_settings": "アカウント設定",
+    "nav_profile": "個人情報",
+    "nav_security": "ログインとセキュリティ",
+    "nav_payments": "お支払いと受け取り",
+    "nav_language": "言語と通貨",
+    "payments_title": "お支払いと受け取り",
+    "payments_coming_soon": "この機能は近日公開予定です",
+    "language_title": "言語と通貨",
+    "language_coming_soon": "この機能は近日公開予定です",
+    "verification_section_title": "本人確認",
+    "full_name": "法的な商号、名称または氏名",
+    "last_name_label": "姓",
+    "first_name_label": "名",
+    "name_id_hint": "証明書の記載通りにご入力ください",
+    "email_label": "メールアドレス",
+    "email_update_hint": "変更後、新しいメールアドレスに確認メールが送信されます",
+    "email_verification_sent": "確認メールを送信しました。新しいメールアドレスをご確認ください"
   },
   "favorites": {
     "title": "お気に入り",

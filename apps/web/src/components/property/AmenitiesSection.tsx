@@ -504,7 +504,7 @@ export function AmenitiesSection({ amenities, locale }: AmenitiesSectionProps) {
               {getCategoryLabel(category, locale)}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-3">
-              {grouped[category].map((a) => (
+              {grouped[category]?.map((a) => (
                 <div key={a.id} className="flex items-center gap-2.5 text-sm text-gray-700">
                   <span className="text-gray-700">{getIcon(a.name)}</span>
                   {a.name}

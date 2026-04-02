@@ -205,17 +205,17 @@ export function Nav({
           </div>
         ) : (
           <div className="hidden md:flex items-center gap-2">
-            <button
+            {/* <button
               onClick={() => setAuthOpen(true)}
               className="px-3.5 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
             >
               {L(locale, "登录", "ログイン", "Log in")}
-            </button>
+            </button> */}
             <button
               onClick={() => setAuthOpen(true)}
               className="px-3.5 py-1.5 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors"
             >
-              {L(locale, "注册", "登録", "Sign up")}
+              {L(locale, "登录或注册", "ログインまたは登録", "Log in or Sign up")}
             </button>
           </div>
         )}

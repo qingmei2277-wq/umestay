@@ -22,6 +22,8 @@ export type Database = {
       profiles: {
         Row: {
           user_id: string;
+          last_name: string | null;
+          first_name: string | null;
           name: string | null;
           phone: string | null;
           avatar_url: string | null;
@@ -35,6 +37,8 @@ export type Database = {
         };
         Insert: {
           user_id: string;
+          last_name?: string | null;
+          first_name?: string | null;
           name?: string | null;
           phone?: string | null;
           avatar_url?: string | null;
@@ -44,6 +48,8 @@ export type Database = {
           preferred_lang?: string;
         };
         Update: {
+          last_name?: string | null;
+          first_name?: string | null;
           name?: string | null;
           phone?: string | null;
           avatar_url?: string | null;

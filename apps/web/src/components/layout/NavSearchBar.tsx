@@ -74,7 +74,13 @@ export function NavSearchBar({ locale }: NavSearchBarProps) {
           className="fixed top-[18px] left-1/2 -translate-x-1/2 z-[310] w-full max-w-[700px] px-4 pt-3"
         >
           <SearchBar
-            value={{ location: q || undefined, checkin: checkin || undefined, checkout: checkout || undefined, guests: guests || undefined }}
+            // value={{ location: q || undefined, checkin: checkin || undefined, checkout: checkout || undefined, guests: guests || undefined }}
+            value={{
+              ...(q        && { location: q }),
+              ...(checkin  && { checkin }),
+              ...(checkout && { checkout }),
+              ...(guests   && { guests }),
+            }}
             onSearch={handleSearch}
             locale={locale}
             className="w-full"

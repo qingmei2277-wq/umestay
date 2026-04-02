@@ -42,9 +42,9 @@ export default async function SettingsPage({ params }: PageProps) {
   };
 
   return (
-    <main className="max-w-xl mx-auto px-4 py-10">
-      <h1 className="text-xl font-bold text-gray-900 mb-8">{labels.title}</h1>
+    <>
+      <h1 className="text-xl font-bold text-gray-900 mb-8">{t("nav_security")}</h1>
       <SettingsClient locale={locale} labels={labels} hasEmail={!!user.email} />
-    </main>
+    </>
   );
 }
