@@ -11,7 +11,10 @@ const PROTECTED_SEGMENTS = [
   "favorites",
   "payment",
   "reviews",
+  "hosting",
 ];
+
+const HOST_ROLES = new Set(["host", "co_host", "operator", "super_admin"]);
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -34,6 +37,22 @@ export async function middleware(request: NextRequest) {
       const loginUrl = new URL(`/${locale}/login`, request.url);
       loginUrl.searchParams.set("next", pathname);
       return NextResponse.redirect(loginUrl);
+    }
+
+    // Additional role check for /hosting routes
+    const isHostingRoute = pathname.match(new RegExp(`/(zh|ja|en)/hosting(/|$)`));
+    if (isHostingRoute) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .single();
+
+      const role = profile?.role as string | undefined;
+      if (!role || !HOST_ROLES.has(role)) {
+        const locale = pathname.split("/")[1] ?? "zh";
+        return NextResponse.redirect(new URL(`/${locale}`, request.url));
+      }
     }
   }
 

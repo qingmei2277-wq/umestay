@@ -21,6 +21,7 @@ interface NavProps {
   onSignOut?: () => void;
   authModalContent?: React.ReactNode;
   searchBar?: React.ReactNode;
+  hostModeButton?: React.ReactNode;
 }
 
 const L = (locale: Locale, zh: string, ja: string, en: string) =>
@@ -36,6 +37,7 @@ export function Nav({
   onSignOut,
   authModalContent,
   searchBar,
+  hostModeButton,
 }: NavProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -99,6 +101,11 @@ export function Nav({
           </div>
         ) : (
           <div className="flex-1" />
+        )}
+
+        {/* Host mode toggle */}
+        {hostModeButton && (
+          <div className="hidden md:block">{hostModeButton}</div>
         )}
 
         {/* Locale switcher */}
@@ -270,6 +277,11 @@ export function Nav({
           {user && (
             <>
               <div className="h-px bg-gray-100 my-1" />
+              {hostModeButton && (
+                <div className="px-0 py-0.5" onClick={() => setMobileOpen(false)}>
+                  {hostModeButton}
+                </div>
+              )}
               <button
                 onClick={() => { onSignOut?.(); setMobileOpen(false); }}
                 className="block w-full text-left px-3 py-2.5 text-sm text-red-500 hover:bg-red-50 rounded-lg transition-colors"
