@@ -130,7 +130,7 @@ export function HostingBookingDetail({
               {labels.labelDates}
             </dt>
             <dd className="text-sm text-gray-900">
-              {formatDate(booking.checkin_date)} → {formatDate(booking.checkout_date)}
+              {formatDate(booking.checkin)} → {formatDate(booking.checkout)}
             </dd>
           </div>
 
@@ -138,7 +138,7 @@ export function HostingBookingDetail({
             <dt className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
               {labels.labelGuests}
             </dt>
-            <dd className="text-sm text-gray-900">{(booking.guest_count as number) ?? "—"}</dd>
+            <dd className="text-sm text-gray-900">{(booking.guests as number) ?? "—"}</dd>
           </div>
 
           <div>

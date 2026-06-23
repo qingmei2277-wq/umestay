@@ -6,10 +6,10 @@ interface Booking {
   id: string;
   property_id: string;
   status: string;
-  checkin_date: string | null;
-  checkout_date: string | null;
+  checkin: string | null;
+  checkout: string | null;
   total_price: number | null;
-  guest_count: number | null;
+  guests: number | null;
   created_at: string;
 }
 
@@ -89,8 +89,8 @@ function BookingCard({
   }
 
   const dateRange =
-    booking.checkin_date && booking.checkout_date
-      ? `${booking.checkin_date} ~ ${booking.checkout_date}`
+    booking.checkin && booking.checkout
+      ? `${booking.checkin} ~ ${booking.checkout}`
       : "—";
 
   return (
@@ -101,9 +101,9 @@ function BookingCard({
           <p className="text-xs text-gray-500">
             {labels.booking_dates}: <span className="text-gray-800 font-medium">{dateRange}</span>
           </p>
-          {booking.guest_count != null && (
+          {booking.guests != null && (
             <p className="text-xs text-gray-500">
-              {labels.booking_guests}: <span className="text-gray-800 font-medium">{booking.guest_count}</span>
+              {labels.booking_guests}: <span className="text-gray-800 font-medium">{booking.guests}</span>
             </p>
           )}
         </div>

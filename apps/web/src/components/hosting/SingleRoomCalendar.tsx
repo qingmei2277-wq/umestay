@@ -9,8 +9,8 @@ interface Block {
 }
 
 interface Booking {
-  checkin_date: string;
-  checkout_date: string;
+  checkin: string;
+  checkout: string;
   status: string;
   id: string;
 }
@@ -72,8 +72,8 @@ export function SingleRoomCalendar({
 
   const bookedDates = new Map<string, string>();
   for (const bk of bookings) {
-    if (bk.checkin_date && bk.checkout_date) {
-      for (const d of getDatesInRange(bk.checkin_date, bk.checkout_date)) {
+    if (bk.checkin && bk.checkout) {
+      for (const d of getDatesInRange(bk.checkin, bk.checkout)) {
         bookedDates.set(d, bk.status);
       }
     }

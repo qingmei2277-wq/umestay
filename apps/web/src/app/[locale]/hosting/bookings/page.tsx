@@ -40,7 +40,7 @@ export default async function HostingBookingsPage({ params }: PageProps) {
 
   const { data: bookings } = await supabase
     .from("bookings")
-    .select("id, property_id, status, checkin_date, checkout_date, total_price, guest_count, created_at, guest_id")
+    .select("id, property_id, status, checkin, checkout, total_price, guests, created_at, user_id")
     .in("property_id", ids.length > 0 ? ids : [""])
     .order("created_at", { ascending: false });
 
@@ -69,10 +69,10 @@ export default async function HostingBookingsPage({ params }: PageProps) {
     id: string;
     property_id: string;
     status: string;
-    checkin_date: string | null;
-    checkout_date: string | null;
+    checkin: string | null;
+    checkout: string | null;
     total_price: number | null;
-    guest_count: number | null;
+    guests: number | null;
     created_at: string;
   };
 
@@ -80,10 +80,10 @@ export default async function HostingBookingsPage({ params }: PageProps) {
     id: b.id as string,
     property_id: b.property_id as string,
     status: b.status as string,
-    checkin_date: (b.checkin_date as string) ?? null,
-    checkout_date: (b.checkout_date as string) ?? null,
+    checkin: (b.checkin as string) ?? null,
+    checkout: (b.checkout as string) ?? null,
     total_price: (b.total_price as number) ?? null,
-    guest_count: (b.guest_count as number) ?? null,
+    guests: (b.guests as number) ?? null,
     created_at: b.created_at as string,
   })) satisfies BookingRow[];
 

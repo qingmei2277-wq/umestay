@@ -32,7 +32,7 @@ export default async function HostingIncomePage({ params }: PageProps) {
 
   const { data: payouts } = await supabase
     .from("host_payouts")
-    .select("id, amount, status, created_at, booking_id, notes")
+    .select("id, amount, status, created_at, booking_id, note")
     .eq("host_id", user.id)
     .order("created_at", { ascending: false });
 

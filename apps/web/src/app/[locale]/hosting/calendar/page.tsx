@@ -74,10 +74,10 @@ export default async function HostingCalendarPage({ params }: PageProps) {
   const { data: allBookings } = roomIds.length > 0
     ? await supabase
         .from("bookings")
-        .select("property_id, checkin_date, checkout_date, status")
+        .select("property_id, checkin, checkout, status")
         .in("property_id", roomIds)
         .in("status", ["confirmed", "pending_payment", "checked_in"])
-        .gte("checkout_date", todayStr)
+        .gte("checkout", todayStr)
     : { data: [] };
 
   const blocksList = (allBlocks ?? []) as Array<Record<string, unknown>>;
@@ -95,8 +95,8 @@ export default async function HostingCalendarPage({ params }: PageProps) {
   for (const bk of bookingsList) {
     const pid = bk.property_id as string;
     if (!bookingsMap.has(pid)) bookingsMap.set(pid, new Map());
-    const checkin = bk.checkin_date as string;
-    const checkout = bk.checkout_date as string;
+    const checkin = bk.checkin as string;
+    const checkout = bk.checkout as string;
     const status = bk.status as string;
     if (checkin && checkout) {
       for (const d of getDatesInRange(checkin, checkout)) {

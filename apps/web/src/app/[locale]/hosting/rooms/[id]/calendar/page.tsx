@@ -44,7 +44,7 @@ export default async function RoomCalendarPage({ params }: PageProps) {
 
   const { data: bookings } = await supabase
     .from("bookings")
-    .select("checkin_date, checkout_date, status, id")
+    .select("checkin, checkout, status, id")
     .eq("property_id", id)
     .in("status", ["confirmed", "pending_payment", "checked_in"]);
 
@@ -79,7 +79,7 @@ export default async function RoomCalendarPage({ params }: PageProps) {
       <SingleRoomCalendar
         propertyId={id}
         blocks={(blocks ?? []) as Array<{ blocked_date: string; source: string; note?: string | null }>}
-        bookings={(bookings ?? []) as Array<{ checkin_date: string; checkout_date: string; status: string; id: string }>}
+        bookings={(bookings ?? []) as Array<{ checkin: string; checkout: string; status: string; id: string }>}
         labels={labels}
         blockDates={blockDates}
         unblockDates={unblockDates}
