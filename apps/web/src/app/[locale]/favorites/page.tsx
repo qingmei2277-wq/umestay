@@ -43,8 +43,8 @@ export default async function FavoritesPage({ params }: PageProps) {
   // 批量获取房源摘要
   let properties: PropertySummaryRow[] = [];
   if (propertyIds.length > 0) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data } = await (supabase.from("v_properties_summary" as any) as any)
+    const { data } = await supabase
+      .from("v_properties_summary")
       .select("*")
       .in("id", propertyIds);
     properties = data ?? [];

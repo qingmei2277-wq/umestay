@@ -1,47 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-// ── Row types from v_properties_summary view ──────────────────────────────────
-// These mirror the view columns defined in 20240102000000_view_properties_summary.sql
-
-export interface PropertySummaryRow {
-  id: string;
-  owner_id: string | null;
-  managed_by: string;
-  type: "daily" | "monthly";
-  status: string;
-  title_zh: string;
-  title_ja: string | null;
-  title_en: string | null;
-  description_zh: string | null;
-  description_ja: string | null;
-  description_en: string | null;
-  prefecture: string | null;
-  city: string | null;
-  nearest_station: string | null;
-  station_walk_min: number | null;
-  lat: number | null;
-  lng: number | null;
-  price_daily: number | null;
-  price_monthly: number | null;
-  cleaning_fee: number;
-  deposit_amount: number;
-  max_guests: number;
-  area_sqm: number | null;
-  floor: number | null;
-  license_number: string | null;
-  license_expires_at: string | null;
-  checkin_time: string | null;
-  checkout_time: string | null;
-  checkin_method: string | null;
-  cancellation_policy: string | null;
-  house_rules: string | null;
-  rating_avg: number;
-  review_count: number;
-  cover_image_url: string | null;
-  published_at: string | null;
-  created_at: string;
-  updated_at: string;
-}
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "../types";
 
 export type PropertyFilters = {
   type?: "daily" | "monthly";
@@ -54,12 +12,11 @@ export type PropertyFilters = {
   pageSize?: number;
 };
 
-export async function getProperties(client: any, filters: PropertyFilters = {}) {
+export async function getProperties(client: SupabaseClient<Database>, filters: PropertyFilters = {}) {
   const { page = 1, pageSize = 20 } = filters;
   const from = (page - 1) * pageSize;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let query = (client.from("v_properties_summary" as any) as any)
+  let query = client.from("v_properties_summary")
     .select("*", { count: "exact" })
     .eq("status", "active")
     .range(from, from + pageSize - 1);
@@ -78,24 +35,22 @@ export async function getProperties(client: any, filters: PropertyFilters = {}) 
     default:           query = query.order("rating_avg",   { ascending: false });
   }
 
-  return query as Promise<{ data: PropertySummaryRow[] | null; count: number | null; error: unknown }>;
+  return query;
 }
 
-export async function getPropertyById(client: any, id: string) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (client.from("v_properties_summary" as any) as any)
+export async function getPropertyById(client: SupabaseClient<Database>, id: string) {
+  return client.from("v_properties_summary")
     .select("*")
     .eq("id", id)
-    .single() as Promise<{ data: PropertySummaryRow | null; error: unknown }>;
+    .single();
 }
 
-export async function getFeaturedProperties(client: any, limit = 6) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (client.from("v_properties_summary" as any) as any)
+export async function getFeaturedProperties(client: SupabaseClient<Database>, limit = 6) {
+  return client.from("v_properties_summary")
     .select("*")
     .eq("status", "active")
     .order("rating_avg", { ascending: false })
-    .limit(limit) as Promise<{ data: PropertySummaryRow[] | null; error: unknown }>;
+    .limit(limit);
 }
 
 export interface AmenityRow {
@@ -106,7 +61,7 @@ export interface AmenityRow {
   enabled: boolean;
 }
 
-export async function getPropertyAmenities(client: any, propertyId: string) {
+export async function getPropertyAmenities(client: SupabaseClient<Database>, propertyId: string) {
   return client
     .from("amenities")
     .select("id, property_id, category, name, enabled")
@@ -129,7 +84,7 @@ export interface ReviewRow {
   created_at: string;
 }
 
-export async function getPropertyReviews(client: any, propertyId: string, limit = 5) {
+export async function getPropertyReviews(client: SupabaseClient<Database>, propertyId: string, limit = 5) {
   return client
     .from("reviews")
     .select("id, booking_id, reviewer_id, property_id, rating_overall, rating_clean, rating_location, rating_value, comment, host_reply, status, created_at")
@@ -147,7 +102,7 @@ export interface PropertyImageRow {
   is_cover: boolean;
 }
 
-export async function getPropertyImages(client: any, propertyId: string) {
+export async function getPropertyImages(client: SupabaseClient<Database>, propertyId: string) {
   return client
     .from("property_images")
     .select("id, property_id, url, sort_order, is_cover")
@@ -155,7 +110,7 @@ export async function getPropertyImages(client: any, propertyId: string) {
     .order("sort_order");
 }
 
-export async function getBlockedDates(client: any, propertyId: string) {
+export async function getBlockedDates(client: SupabaseClient<Database>, propertyId: string) {
   return client
     .from("calendar_blocks")
     .select("blocked_date")

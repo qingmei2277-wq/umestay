@@ -48,12 +48,12 @@ export function createUmestayServerClient(cookieMethods: CookieMethods) {
       // @supabase/ssr 0.3.0 uses get/set/remove (not getAll/setAll)
       // Bridge the getAll/setAll interface to the API this version expects
       cookies: {
-        get: (name) =>
+        get: (name: string) =>
           cookieMethods.getAll().find((c) => c.name === name)?.value ?? null,
-        set: (name, value, options) =>
-          cookieMethods.setAll([{ name, value, options: options as Record<string, unknown> }]),
-        remove: (name, options) =>
-          cookieMethods.setAll([{ name, value: "", options: { ...(options as Record<string, unknown>), maxAge: 0 } }]),
+        set: (name: string, value: string, options?: Record<string, unknown>) =>
+          cookieMethods.setAll([{ name, value, options: options ?? {} }]),
+        remove: (name: string, options?: Record<string, unknown>) =>
+          cookieMethods.setAll([{ name, value: "", options: { ...(options ?? {}), maxAge: 0 } }]),
       },
     }
   );

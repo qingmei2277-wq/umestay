@@ -53,6 +53,14 @@ export type ProfileUpdate  = Database["public"]["Tables"]["profiles"]["Update"];
 export type PropertyUpdate = Database["public"]["Tables"]["properties"]["Update"];
 export type BookingUpdate  = Database["public"]["Tables"]["bookings"]["Update"];
 
+// ── View types ────────────────────────────────────────────────────────────────
+
+export type PropertySummary =
+  Database["public"]["Views"]["v_properties_summary"]["Row"];
+
+/** @deprecated 使用 PropertySummary 代替 */
+export type PropertySummaryRow = PropertySummary;
+
 // ── Enum types ────────────────────────────────────────────────────────────────
 
 export type UserRole                 = Database["public"]["Enums"]["user_role"];

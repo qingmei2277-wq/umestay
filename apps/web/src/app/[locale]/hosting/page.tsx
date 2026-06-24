@@ -37,8 +37,7 @@ export default async function HostingOverviewPage({ params }: PageProps) {
 
   // KPI 1: Active properties owned by user
   const { count: activeRooms } = await supabase
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .from("properties" as any)
+    .from("properties")
     .select("id", { count: "exact", head: true })
     .eq("owner_id", user.id)
     .eq("status", "active");
@@ -46,8 +45,7 @@ export default async function HostingOverviewPage({ params }: PageProps) {
   // KPI 2: Pending bookings for host's properties
   let pendingBookings = 0;
   const { data: propertyRows } = await supabase
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .from("properties" as any)
+    .from("properties")
     .select("id")
     .eq("owner_id", user.id);
 
@@ -55,8 +53,7 @@ export default async function HostingOverviewPage({ params }: PageProps) {
 
   if (propertyIds.length > 0) {
     const { count } = await supabase
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .from("bookings" as any)
+      .from("bookings")
       .select("id", { count: "exact", head: true })
       .eq("status", "pending_payment")
       .in("property_id", propertyIds);
@@ -65,8 +62,7 @@ export default async function HostingOverviewPage({ params }: PageProps) {
 
   // KPI 3: Pending payout sum
   const { data: payoutRows } = await supabase
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .from("host_payouts" as any)
+    .from("host_payouts")
     .select("amount")
     .eq("host_id", user.id)
     .eq("status", "pending");
@@ -108,7 +104,7 @@ export default async function HostingOverviewPage({ params }: PageProps) {
       href: `/${locale}/hosting/income`,
       label: t("nav_income"),
       icon: (
-        <svg className="w-6 h-6 ucide lucide-wallet-cards-icon lucide-wallet-cards" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"/></svg>
+        <svg className="w-6 h-6 ucide lucide-wallet-cards-icon lucide-wallet-cards" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"/></svg>
       ),
     },
   ];

@@ -26,9 +26,9 @@ export {
   getBlockedDates,
 } from "./queries/properties";
 export type {
-  PropertySummaryRow,
   PropertyFilters,
   AmenityRow,
   ReviewRow,
   PropertyImageRow,
 } from "./queries/properties";
+export type { PropertySummary, PropertySummaryRow } from "./types";

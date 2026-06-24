@@ -77,7 +77,7 @@ export function AppNav({ locale }: AppNavProps) {
         href={`/${locale}/hosting`}
         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-700 border border-gray-200 hover:border-primary hover:text-primary transition-colors"
       >
-        <svg className="w-3.5 h-3.5 lucide lucide-settings2-icon lucide-settings-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 17H5"/><path d="M19 7h-9"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+        <svg className="w-3.5 h-3.5 lucide lucide-settings2-icon lucide-settings-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 17H5"/><path d="M19 7h-9"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
         {L(locale, "房东工作台模式", "管理モード", "Hosting Mode")}
       </Link>
     )
