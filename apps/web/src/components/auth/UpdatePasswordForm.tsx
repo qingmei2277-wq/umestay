@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { updatePasswordAction } from "@/actions/auth";
 
-export function UpdatePasswordForm({ tokenHash }: { tokenHash?: string }) {
+export function UpdatePasswordForm({ tokenHash }: { tokenHash?: string | undefined }) {
   const t = useTranslations("auth");
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);

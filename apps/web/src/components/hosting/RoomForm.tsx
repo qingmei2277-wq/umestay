@@ -67,7 +67,7 @@ function Label({ children, required }: { children: React.ReactNode; required?: b
 function Counter({
   label, value, min = 0, max = 20, onChange,
 }: {
-  label: string; value: number; min?: number; max?: number; onChange: (v: number) => void;
+  label: string | undefined; value: number; min?: number; max?: number; onChange: (v: number) => void;
 }) {
   return (
     <div className="flex items-center justify-between py-4 border-b border-gray-100 last:border-0">
@@ -638,7 +638,7 @@ export function RoomForm({ locale, roomId, defaultValues = {}, labels, saveRoom 
           <ReviewSection title={labels.form_step_basic}>
             {propertyStructure && <ReviewRow label={labels.form_structure_question} value={labels[`form_structure_${propertyStructure}`] ?? propertyStructure} />}
             {roomOffering && <ReviewRow label={labels.form_offering_question} value={labels[`form_offering_${roomOffering}`] ?? roomOffering} />}
-            <ReviewRow label={labels.form_type} value={type === "daily" ? labels.form_type_daily : labels.form_type_monthly} />
+            <ReviewRow label={labels.form_type} value={(type === "daily" ? labels.form_type_daily : labels.form_type_monthly) ?? ""} />
             <ReviewRow label={labels.form_title_zh} value={titleZh} />
             {titleJa && <ReviewRow label={labels.form_title_ja} value={titleJa} />}
             {titleEn && <ReviewRow label={labels.form_title_en} value={titleEn} />}
@@ -734,7 +734,7 @@ export function RoomForm({ locale, roomId, defaultValues = {}, labels, saveRoom 
   );
 }
 
-function ReviewSection({ title, children }: { title: string; children: React.ReactNode }) {
+function ReviewSection({ title, children }: { title: string | undefined; children: React.ReactNode }) {
   return (
     <div>
       <h3 className="text-sm font-semibold text-gray-800 mb-3 pb-2 border-b border-gray-100">{title}</h3>
@@ -743,7 +743,7 @@ function ReviewSection({ title, children }: { title: string; children: React.Rea
   );
 }
 
-function ReviewRow({ label, value, multiline = false }: { label: string; value: string; multiline?: boolean }) {
+function ReviewRow({ label, value, multiline = false }: { label: string | undefined; value: string; multiline?: boolean }) {
   return (
     <div className="flex gap-3 text-sm">
       <dt className="w-36 flex-shrink-0 text-gray-500">{label}</dt>

@@ -87,13 +87,14 @@ export function BookingCard({
   const [calOpen, setCalOpen]   = useState(false);
 
   const isMonthly = property.type === "monthly";
-  const unitPrice = isMonthly ? property.price_monthly : property.price_daily;
+  const unitPrice = Number(isMonthly ? property.price_monthly : property.price_daily) || 0;
 
   const nights  = checkin && checkout ? diffDays(checkin, checkout) : 0;
   const months  = checkin && checkout ? diffMonths(checkin, checkout) : 0;
   const units   = isMonthly ? months : nights;
-  const subtotal = units > 0 && unitPrice ? units * unitPrice : null;
-  const total    = subtotal != null ? subtotal + (property.cleaning_fee ?? 0) : null;
+  const subtotal = units > 0 && unitPrice > 0 ? units * unitPrice : null;
+  const cleaningFee = Number(property.cleaning_fee) || 0;
+  const total    = subtotal != null ? subtotal + cleaningFee : null;
 
   const handleBook = () => {
     const qs = new URLSearchParams();
@@ -103,7 +104,7 @@ export function BookingCard({
     router.push(`/${locale}/bookings/new?property=${property.id}&${qs.toString()}`);
   };
 
-  const priceLabel = unitPrice
+  const priceLabel = unitPrice > 0
     ? `¥${unitPrice.toLocaleString()} / ${isMonthly ? t.perMonth : t.perNight}`
     : "–";
 
@@ -124,12 +125,12 @@ export function BookingCard({
     {/* Price */}
       <div className="flex items-baseline gap-1 mb-5">
         <span className="text-2xl font-bold text-gray-900">
-          ¥{unitPrice?.toLocaleString() ?? "–"}
+          ¥{unitPrice > 0 ? unitPrice.toLocaleString() : "–"}
         </span>
         <span className="text-sm text-gray-500">/ {isMonthly ? t.perMonth : t.perNight}</span>
-        {(property.rating_avg ?? 0) > 0 && (
+        {Number(property.rating_avg) > 0 && (
           <div className="ml-auto">
-            <Stars rating={property.rating_avg} count={property.review_count} size="sm" />
+            <Stars rating={Number(property.rating_avg)} count={property.review_count} size="sm" />
           </div>
         )}
       </div>
@@ -182,10 +183,10 @@ export function BookingCard({
             </span>
             <span>¥{subtotal.toLocaleString()}</span>
           </div>
-          {property.cleaning_fee > 0 && (
+          {cleaningFee > 0 && (
             <div className="flex justify-between text-gray-700">
               <span>{t.cleaningFee}</span>
-              <span>¥{property.cleaning_fee.toLocaleString()}</span>
+              <span>¥{cleaningFee.toLocaleString()}</span>
             </div>
           )}
           <div className="flex justify-between font-bold text-gray-900 pt-1">

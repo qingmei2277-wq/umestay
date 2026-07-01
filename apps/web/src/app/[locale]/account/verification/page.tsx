@@ -66,20 +66,26 @@ export default async function VerificationPage({ params }: PageProps) {
 
     const { data: kyc, error } = await supabase
       .from("kyc_verifications")
-      .insert({ user_id: user.id, doc_type: docType, status: "pending" })
+      .insert({ user_id: user.id, doc_type: docType as "passport" | "my_number" | "residence_card" | "drivers_license", doc_url: "pending", status: "pending" })
       .select("id")
       .single();
     if (error) return { error: "提交失败，请重试" };
 
+    const docUrl = `${user.id}/${kyc.id}/front`;
     await serviceClient.storage
       .from("kyc-documents")
-      .upload(`${user.id}/${kyc.id}/front`, frontFile, { upsert: true });
+      .upload(docUrl, frontFile, { upsert: true });
 
     if (backFile && backFile.size > 0) {
       await serviceClient.storage
         .from("kyc-documents")
         .upload(`${user.id}/${kyc.id}/back`, backFile, { upsert: true });
     }
+
+    await supabase
+      .from("kyc_verifications")
+      .update({ doc_url: docUrl })
+      .eq("id", kyc.id);
 
     revalidatePath(`/[locale]/account/verification`, "page");
   }

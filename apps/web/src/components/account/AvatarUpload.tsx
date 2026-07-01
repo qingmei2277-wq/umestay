@@ -59,7 +59,7 @@ export function AvatarUpload({
           <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
         ) : (
           <span className="text-primary text-3xl font-semibold">
-            {(name || "U")[0].toUpperCase()}
+            {((name || "U")[0] ?? "U").toUpperCase()}
           </span>
         )}
         {uploading && (

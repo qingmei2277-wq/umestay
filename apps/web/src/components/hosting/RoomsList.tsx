@@ -9,12 +9,12 @@ interface Room {
   title_ja: string | null;
   title_en: string | null;
   status: string;
-  type: string | null;
-  managed_by: string | null;
+  type: string;
+  managed_by: string;
   prefecture: string | null;
   city: string | null;
-  price_daily: number | null;
-  price_monthly: number | null;
+  price_daily: string | null;
+  price_monthly: string | null;
 }
 
 interface RoomsListProps {

@@ -30,6 +30,7 @@ interface ProfileFormProps {
   preferredLang: string;
   langOptions: { value: string; label: string }[];
   labels: {
+    fullName: string;
     lastName: string;
     firstName: string;
     nameIdHint: string;

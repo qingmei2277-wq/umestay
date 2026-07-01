@@ -13,7 +13,7 @@ const STATUS_STYLES: Record<string, string> = {
 };
 
 function getStatusLabel(status: string, labels: { [key: string]: string }) {
-  const map: Record<string, string> = {
+  const map: Record<string, string | undefined> = {
     pending: labels.statusPending,
     processing: labels.statusProcessing,
     paid: labels.statusPaid,

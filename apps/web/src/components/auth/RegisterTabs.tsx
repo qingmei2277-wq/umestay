@@ -7,7 +7,7 @@ import { EmailRegisterForm } from "./EmailRegisterForm";
 import { PhoneRegisterForm } from "./PhoneRegisterForm";
 
 interface RegisterTabsProps {
-  next?: string;
+  next?: string | undefined;
 }
 
 export function RegisterTabs({ next }: RegisterTabsProps) {

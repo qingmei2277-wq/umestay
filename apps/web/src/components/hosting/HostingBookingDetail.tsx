@@ -23,7 +23,7 @@ const STATUS_STYLES: Record<string, string> = {
 };
 
 function getStatusLabel(status: string, labels: { [key: string]: string }) {
-  const map: Record<string, string> = {
+  const map: Record<string, string | undefined> = {
     pending_payment: labels.statusPending,
     confirmed: labels.statusConfirmed,
     checked_in: labels.statusCheckedIn,

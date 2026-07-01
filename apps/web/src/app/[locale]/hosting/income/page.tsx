@@ -32,17 +32,17 @@ export default async function HostingIncomePage({ params }: PageProps) {
 
   const { data: payouts } = await supabase
     .from("host_payouts")
-    .select("id, amount, status, created_at, booking_id, note")
+    .select("id, amount, status, created_at, booking_ids, note")
     .eq("host_id", user.id)
     .order("created_at", { ascending: false });
 
   const pendingAmount = (payouts ?? [])
-    .filter((p: Record<string, unknown>) => p.status === "pending")
-    .reduce((sum: number, p: Record<string, unknown>) => sum + ((p.amount as number) ?? 0), 0);
+    .filter((p) => p.status === "pending")
+    .reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
 
   const totalPaid = (payouts ?? [])
-    .filter((p: Record<string, unknown>) => p.status === "paid")
-    .reduce((sum: number, p: Record<string, unknown>) => sum + ((p.amount as number) ?? 0), 0);
+    .filter((p) => p.status === "paid")
+    .reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
 
   const labels = {
     statusPending: t("income_status_pending"),

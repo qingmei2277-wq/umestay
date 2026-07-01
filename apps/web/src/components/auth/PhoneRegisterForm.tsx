@@ -8,7 +8,7 @@ import { CountdownButton } from "./CountdownButton";
 import { sendOtpAction, registerPhoneAction } from "@/actions/auth";
 
 interface PhoneRegisterFormProps {
-  next?: string;
+  next?: string | undefined;
 }
 
 export function PhoneRegisterForm({ next }: PhoneRegisterFormProps) {

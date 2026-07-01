@@ -12,9 +12,9 @@ export interface PropertySummary {
   title_en?: string | null;
   cover_image_url?: string | null;
   city?: string | null;
-  price_daily?: number | null;
-  price_monthly?: number | null;
-  rating_avg?: number;
+  price_daily?: string | null;
+  price_monthly?: string | null;
+  rating_avg?: string;
   review_count?: number;
   is_featured?: boolean;
 }
@@ -43,10 +43,13 @@ export function PropertyCard({
     property.title_en ??
     "";
 
+  const priceNum = Number(property.type === "monthly" ? property.price_monthly : property.price_daily) || 0;
+  const ratingNum = Number(property.rating_avg) || 0;
+
   const price =
     property.type === "monthly"
-      ? `¥${property.price_monthly?.toLocaleString() ?? "–"}/月`
-      : `¥${property.price_daily?.toLocaleString() ?? "–"}/泊`;
+      ? `¥${priceNum > 0 ? priceNum.toLocaleString() : "–"}/月`
+      : `¥${priceNum > 0 ? priceNum.toLocaleString() : "–"}/泊`;
 
   const inner = (
     <div
@@ -84,9 +87,9 @@ export function PropertyCard({
         <h3 className="font-medium text-gray-900 line-clamp-1 text-sm">{title}</h3>
         <div className="flex items-center justify-between mt-1">
           <span className="text-xs text-gray-500">{property.city}</span>
-          {(property.rating_avg ?? 0) > 0 && (
+          {ratingNum > 0 && (
             <Stars
-              rating={property.rating_avg ?? 0}
+              rating={ratingNum}
               {...(property.review_count !== undefined ? { count: property.review_count } : {})}
               size="sm"
             />

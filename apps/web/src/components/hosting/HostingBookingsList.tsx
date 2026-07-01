@@ -24,15 +24,15 @@ interface HostingBookingsListProps {
 const TAB_STATUSES = ["all", "pending_payment", "confirmed", "checked_in", "completed", "cancelled_by_host"] as const;
 
 function getTabLabel(status: string, labels: { [key: string]: string }): string {
-  switch (status) {
-    case "all": return labels.booking_status_all;
-    case "pending_payment": return labels.booking_status_pending;
-    case "confirmed": return labels.booking_status_confirmed;
-    case "checked_in": return labels.booking_status_checked_in;
-    case "completed": return labels.booking_status_completed;
-    case "cancelled_by_host": return labels.booking_status_cancelled;
-    default: return status;
-  }
+  const map: Record<string, string | undefined> = {
+    all: labels.booking_status_all,
+    pending_payment: labels.booking_status_pending,
+    confirmed: labels.booking_status_confirmed,
+    checked_in: labels.booking_status_checked_in,
+    completed: labels.booking_status_completed,
+    cancelled_by_host: labels.booking_status_cancelled,
+  };
+  return map[status] ?? status;
 }
 
 function StatusBadge({ status, labels }: { status: string; labels: { [key: string]: string } }) {

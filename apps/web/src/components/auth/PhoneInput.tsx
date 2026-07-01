@@ -31,7 +31,7 @@ export function PhoneInput({
   placeholder = "09012345678",
   disabled,
 }: PhoneInputProps) {
-  const defaultEntry = COUNTRY_CODES.find((c) => c.country === defaultCountry) ?? COUNTRY_CODES[0];
+  const defaultEntry = COUNTRY_CODES.find((c) => c.country === defaultCountry) ?? COUNTRY_CODES[0]!;
   const [countryCode, setCountryCode] = useState(defaultEntry.code);
   const [localNumber, setLocalNumber] = useState("");
 

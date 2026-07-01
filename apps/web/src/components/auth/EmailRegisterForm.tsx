@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { registerEmailAction } from "@/actions/auth";
 
 interface EmailRegisterFormProps {
-  next?: string;
+  next?: string | undefined;
 }
 
 export function EmailRegisterForm({ next }: EmailRegisterFormProps) {

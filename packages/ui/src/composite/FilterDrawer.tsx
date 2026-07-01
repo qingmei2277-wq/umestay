@@ -3,16 +3,8 @@
 import { useState } from "react";
 import { cn } from "../utils/cn";
 import { Btn } from "../atoms/Btn";
-import type { ReactElement } from "react";
 type Locale = "zh" | "ja" | "en";
 
-type AmenityItem = {
-  id: string;
-  zh: string;
-  ja: string;
-  en: string;
-  icon: ReactElement;
-};
 
 
 export interface FilterState {

@@ -113,8 +113,8 @@ export default async function PropertyDetailPage({ params, searchParams }: PageP
                     )}
                   </p>
                 </div>
-                {(property.rating_avg ?? 0) > 0 && (
-                  <Stars rating={property.rating_avg} count={property.review_count} size="md" />
+                {Number(property.rating_avg) > 0 && (
+                  <Stars rating={Number(property.rating_avg)} count={property.review_count} size="md" />
                 )}
               </div>
 
@@ -165,7 +165,7 @@ export default async function PropertyDetailPage({ params, searchParams }: PageP
             {/* Reviews */}
             <ReviewsSection
               reviews={reviews}
-              rating={property.rating_avg}
+              rating={Number(property.rating_avg)}
               reviewCount={property.review_count}
               locale={lang}
             />

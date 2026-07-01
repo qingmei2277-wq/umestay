@@ -75,12 +75,12 @@ export async function saveRoom(formData: FormData) {
   let savedId = roomId;
 
   if (roomId) {
-    const { error } = await supabase.from("properties").update(payload).eq("id", roomId);
+    const { error } = await supabase.from("properties").update(payload as never).eq("id", roomId);
     if (error) return { error: error.message };
   } else {
     const { data, error } = await supabase
       .from("properties")
-      .insert({ ...payload, owner_id: user.id, managed_by: "host" })
+      .insert({ ...payload, owner_id: user.id, managed_by: "host" } as never)
       .select("id")
       .single();
     if (error) return { error: error.message };
